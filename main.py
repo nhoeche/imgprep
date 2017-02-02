@@ -3,7 +3,6 @@ import glob
 from PIL import Image
 import numpy as np
 
-
 '''
 This is the [imgprep] image-preparation-script. It should read in triplets of
 images. Then it should recognize a red square in each, denoting the object of
@@ -14,21 +13,20 @@ to each other and insert custom scalebars based on magnification.
 
 def main():
 
-    filenames = []
-    pathes = []
-    load_images(filenames, pathes)
+    filenames = ['/Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
+    pathes = ['sample_images']
+    pics = load_images(filenames, pathes)
 
 
 def load_images(filenames, pathes):
-
-    img = list(len(filenames))
-
+    img = [i for i in range(len(filenames))]
     for i, (filename, path) in enumerate(zip(filenames, pathes)):
-        img[i] = Image.open('{}/{}'.format(filename, path))
+        img[i] = Image.open('{}/{}'.format(path, filename))
+    return img
 
-        # TODO: Save metadata and image objects into numpy array / pandas
-        #       frame
-        # TODO: Rotate the second polarized image by -45°
+    # TODO: Save metadata and image objects into numpy array / pandas
+    #       frame
+    # TODO: Rotate the second polarized image by -45°
 
 
 # TODO: Recognize the Magnification and calculate scale-bar dimensions
