@@ -1,7 +1,5 @@
-import os
-import glob
+
 from PIL import Image
-import numpy as np
 
 '''
 This is the [imgprep] image-preparation-script. It should read in triplets of
