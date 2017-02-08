@@ -11,6 +11,7 @@ to each other and insert custom scalebars based on magnification.
 
 def main():
 
+    # Should write a "get filenames" function for this, possibly with argparse
     filenames = ['Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg',
                  'Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
     pathes = ['sample_images', 'sample_images']
@@ -29,6 +30,12 @@ def load_images(filenames, pathes):
     #       frame
     # TODO: Rotate the second polarized image by -45°
 
+def square_detect(image):
+    # Copypasted, functionality not guaranteed
+    cols = (image[..., 0] == 255).sum(0)
+    left = cols.argsort()[-2:].min()
+    right = cols.argsort()[-2:].max()
+    pass
 
 # TODO: Recognize the Magnification and calculate scale-bar dimensions
 # TODO: Recognize the Red square coordinates
