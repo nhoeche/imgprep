@@ -1,5 +1,5 @@
-
-from PIL import Image
+import skimage
+import numpy as np
 
 '''
 This is the [imgprep] image-preparation-script. It should read in triplets of
@@ -11,15 +11,18 @@ to each other and insert custom scalebars based on magnification.
 
 def main():
 
-    filenames = ['/Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
-    pathes = ['sample_images']
+    filenames = ['Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg',
+                 'Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
+    pathes = ['sample_images', 'sample_images']
+
     pics = load_images(filenames, pathes)
 
 
 def load_images(filenames, pathes):
     img = [i for i in range(len(filenames))]
     for i, (filename, path) in enumerate(zip(filenames, pathes)):
-        img[i] = Image.open('{}/{}'.format(path, filename))
+        img[i] = skimage.io.imread('{}/{}'.format(path, filename))
+        img[i] = skimage.img_as_float(img[i])
     return img
 
     # TODO: Save metadata and image objects into numpy array / pandas
