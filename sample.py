@@ -1,4 +1,5 @@
 import skimage
+import skimage.io
 
 
 class Sample(object):
@@ -9,14 +10,29 @@ class Sample(object):
     '''
 
     def __init__(self, filenames=None, pathes=None):
-        self.filenames = [name for name in filenames]
-        self.pathes = [path for path in pathes]
+        '''
+        Creates instances of the Sample class.
+
+        Attributes:
+        filenames: iterable; list of image-filenames associated with the sample
+        pathes:    itearable; list of pathes associated with the image
+                   filenames.
+        '''
+        try:
+            self.filenames = [name for name in filenames]
+            self.pathes = [path for path in pathes]
+        except TypeError:
+            print("Filenames or pathes not readable.")
+            self.filenames = []
+            self.pathes = []
+
         self.images = []
 
     def load_images(self):
         '''
         Loads microscope images of the sample as numpy arrays and saves the
-        image metadata.
+        image metadata. Make sure to have filenames and pathes set so load the
+        images.
         '''
         self.images = [i for i in range(len(self.filenames))]
 

@@ -7,12 +7,15 @@ interest. It can then crop to the contents of the square, put the images next
 to each other and insert custom scalebars based on magnification.
 '''
 
+
 def main():
-    specimen = sample.Sample
+
+    names = ['Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg',
+             'Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
+    pathes = ['sample_images', 'sample_images']
+
+    specimen = sample.Sample(filenames=names,  pathes=pathes)
     # Should write a "get filenames" function for this, possibly with argparse
-    specimen.filenames = ['Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg',
-                          'Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
-    specimen.pathes = ['sample_images', 'sample_images']
 
     specimen.load_images()
 
