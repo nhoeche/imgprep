@@ -1,5 +1,4 @@
-import skimage
-import numpy as np
+import sample
 
 '''
 This is the [imgprep] image-preparation-script. It should read in triplets of
@@ -10,37 +9,13 @@ to each other and insert custom scalebars based on magnification.
 
 
 def main():
-
+    specimen = sample.Sample()
     # Should write a "get filenames" function for this, possibly with argparse
-    filenames = ['Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg',
-                 'Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
-    pathes = ['sample_images', 'sample_images']
+    specimen.filenames = ['Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg',
+                          'Hofer2_63x_gekreuzt_evtl-coccolithB2.jpg']
+    specimen.pathes = ['sample_images', 'sample_images']
 
-    pics = load_images(filenames, pathes)
-
-
-def load_images(filenames, pathes):
-    img = [i for i in range(len(filenames))]
-    for i, (filename, path) in enumerate(zip(filenames, pathes)):
-        img[i] = skimage.io.imread('{}/{}'.format(path, filename))
-        img[i] = skimage.img_as_float(img[i])
-    return img
-
-    # TODO: Save metadata and image objects into numpy array / pandas
-    #       frame
-    # TODO: Rotate the second polarized image by -45°
-
-def square_detect(image):
-    # Copypasted, functionality not guaranteed
-    cols = (image[..., 0] == 255).sum(0)
-    left = cols.argsort()[-2:].min()
-    right = cols.argsort()[-2:].max()
-    pass
-
-# TODO: Recognize the Magnification and calculate scale-bar dimensions
-# TODO: Recognize the Red square coordinates
-# TODO: Crop the images and place them next to each other
-# TODO: Create three scale-bars and insert them into the images
+    specimen.load_images()
 
 
 if __name__ == "__main__":
