@@ -40,7 +40,7 @@ def main():
 
     # Loading image pathes
     if args.images:
-        specimen.image_pathes = [path for path in args.images]
+        specimen.image_pathes = args.images.split()
         specimen.load_images()
 
 
