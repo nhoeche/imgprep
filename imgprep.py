@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
+
 '''
-This is the [imgprep] image-preparation-script. It should read in triplets of
-images. Then it should recognize a red square in each, denoting the object of
-interest. It can then crop to the contents of the square, put the images next
-to each other and insert custom scalebars based on magnification.
+This is the "imgprep"-script for treating microscopy images.
+
+It can read in multiple images of a sample slide [images].
+Then it can also recognize a unicolor square in each, denoting the object of
+interest, to crop the contents of the square. It can put the images next
+to each other and insert custom scalebars based on magnification levels.
+
+THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 
 import argparse
+
 import sample
 
 
