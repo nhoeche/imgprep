@@ -15,7 +15,7 @@ The images will appear in triplets (normal light, polarized light, and polarized
   - [x] Load the three images of the same object
   - [ ] Meta-data
     - [ ] Read the magnification(x20 or x63) from the file-name
-    - [ ] Read the absolute scale (in mm) from a magnification table .txt
+    - [ ] Read the absolute scale (in mm) from a magnification table (.txt)
 - Alteration
   - [ ] Cropping
     - [ ] Recognize the red square around the object
@@ -25,5 +25,7 @@ The images will appear in triplets (normal light, polarized light, and polarized
     - [ ] Calculate individual scale-bars for every sub-image
     - [ ] Calculate positions for scale-bars
     - [ ] Insert scale-bars
+- Saving
+  - [ ] Save the finished arrangement of sample images into one file (.png)
 
 -> Profit
