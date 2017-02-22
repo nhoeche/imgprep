@@ -1,13 +1,14 @@
+'''
+The sampe class for the imgprep script. One object of this class contains
+three images of the sample. It also defines the methods used to process
+the images.
+'''
+
 import skimage
 import skimage.io
 
 
 class Sample(object):
-    '''
-    The sampe class for the imgprep script. One object of this class contains
-    three images of the sample. It also defines the methods used to process
-    the images.
-    '''
 
     def __init__(self, sample_name):
         '''
