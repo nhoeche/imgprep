@@ -9,14 +9,21 @@ Therefore I will write a small python-script for me to do it automatically. Anot
 
 The images will appear in triplets (normal light, polarized light, and polarized light turned by 90°). I can draw a red rectangle around objects in the microscope software.
 
-## Script-Layout and Progress
+## Script-Structure and Progress
 
-1. [x] Load the three images of the same object
-2. [ ] Read the magnification(x20 or x63) from the file-name
-3. [ ] Read the absolute scale (in mm) from a magnification table .txt
-4. [ ] Recognize the red square around the object
-5. [ ] Crop the image to the insides of the red square
-6. [ ] Put the three cropped images side by side
-7. [ ] generate an individual scale-bar for all three sub-images
+- Initialization
+  - [x] Load the three images of the same object
+  - [ ] Meta-data
+    - [ ] Read the magnification(x20 or x63) from the file-name
+    - [ ] Read the absolute scale (in mm) from a magnification table .txt
+- Alteration
+  - [ ] Cropping
+    - [ ] Recognize the red square around the object
+    - [ ] Crop the image to the insides of the red square
+  - [ ] Image-Arrangement
+  - [ ] Scale-Bars
+    - [ ] Calculate individual scale-bars for every sub-image
+    - [ ] Calculate positions for scale-bars
+    - [ ] Insert scale-bars
 
 -> Profit
