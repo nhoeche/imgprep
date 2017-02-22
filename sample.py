@@ -9,40 +9,30 @@ class Sample(object):
     the images.
     '''
 
-    def __init__(self, filenames=None, pathes=None):
+    def __init__(self, sample_name):
         '''
         Creates instances of the Sample class.
-
-        Attributes:
-        filenames: iterable; list of image-filenames associated with the sample
-        pathes:    itearable; list of pathes associated with the image
-                   filenames.
         '''
-        try:
-            self.filenames = [name for name in filenames]
-            self.pathes = [path for path in pathes]
-        except TypeError:
-            print("Filenames or pathes not readable.")
-            self.filenames = []
-            self.pathes = []
 
+        self.name = sample_name
+
+        self.image_pathes = []
         self.images = []
 
     def load_images(self):
         '''
         Loads microscope images of the sample as numpy arrays and saves the
-        image metadata. Make sure to have filenames and pathes set so load the
-        images.
+        image metadata. Make sure to have filenames and image_pathes set so
+        load the images.
         '''
-        self.images = [i for i in range(len(self.filenames))]
+        self.images = [None] * len(self.image_pathes)
 
-        for i, (filename, path) in enumerate(zip(self.filenames, self.pathes)):
-            self.images[i] = skimage.io.imread('{}/{}'.format(path, filename))
+        for i, path in enumerate(self.image_pathes):
+            self.images[i] = skimage.io.imread(path)
             self.images[i] = skimage.img_as_float(self.images[i])
 
-        # TODO: Save metadata and image objects into numpy array / pandas
-        #       frame
-        # TODO: Rotate the second polarized image by -45°
+        # TODO: Save metadata
+        # TODO: Maybe rotate the second polarized image by -45°
 
     def square_detect(image):
         '''
