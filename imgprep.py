@@ -29,7 +29,7 @@ def main():
                         help='Filenames of images associated to the sample.')
 
     # Verbosity
-    parser.add_argument('-v', '--verbose', action='store_true'
+    parser.add_argument('-v', '--verbose', action='store_true',
                         help='Add verbosity. Prints more info on the screen.')
 
     args = parser.parse_args()

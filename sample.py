@@ -26,11 +26,13 @@ class Sample(object):
         image metadata. Make sure to have filenames and image_pathes set so
         load the images.
         '''
-        self.images = [None] * len(self.image_pathes)
+        self.image_count = len(self.image_pathes)
+        self.images = [None] * self.image_count
 
-        for i, path in enumerate(self.image_pathes):
-            self.images[i] = skimage.io.imread(path)
-            self.images[i] = skimage.img_as_float(self.images[i])
+        if self.image_count > 1:
+            skimage.io.imread_collection(self.image_pathes)
+        else:
+            skimage.io.imread(str(self.image_pathes)
 
         # TODO: Save metadata
         # TODO: Maybe rotate the second polarized image by -45°
