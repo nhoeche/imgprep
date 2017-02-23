@@ -21,15 +21,16 @@ def main():
     parser = argparse.ArgumentParser(usage=__doc__)
 
     # Sample info
-    parser.add_argument('sample', help='The name of the sample to be treated.')
+    parser.add_argument('sample',
+                        help='The name of the sample to be treated.')
 
     # Image loading
-    parser.add_argument('images', help='Filenames of images associated to the '\
-                        'sample.')
+    parser.add_argument('-i', '--images', nargs='+',
+                        help='Filenames of images associated to the sample.')
 
     # Verbosity
-    parser.add_argument('-v', '--verbose', help='Verbosity modus. Prints more '\
-                        'info on the screen.', action='store_true')
+    parser.add_argument('-v', '--verbose', action='store_true'
+                        help='Add verbosity. Prints more info on the screen.')
 
     args = parser.parse_args()
 
