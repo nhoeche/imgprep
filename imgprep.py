@@ -41,7 +41,7 @@ def main():
 
     # Loading image pathes
     if args.images:
-        specimen.image_pathes = args.images.split()
+        specimen.image_pathes = args.images
         specimen.load_images()
 
 
