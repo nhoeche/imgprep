@@ -30,9 +30,9 @@ class Sample(object):
         self.images = [None] * self.image_count
 
         if self.image_count > 1:
-            skimage.io.imread_collection(self.image_pathes)
+            self.images = skimage.io.imread_collection(self.image_pathes)
         else:
-            skimage.io.imread(str(self.image_pathes))
+            self.images = skimage.io.imread(str(self.image_pathes))
 
         # TODO: Save metadata
         # TODO: Maybe rotate the second polarized image by -45°

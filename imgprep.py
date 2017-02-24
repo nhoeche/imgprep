@@ -13,6 +13,8 @@ THIS SCRIPT IS STILL WORK IN PROGRESS!
 
 import argparse
 
+import matplotlib.pyplot as plt
+
 import sample
 
 
@@ -20,15 +22,20 @@ def main():
     # Create the argparser
     parser = argparse.ArgumentParser(usage=__doc__)
 
-    # Sample info
+    # Sample-name: Mandatory
     parser.add_argument('sample',
                         help='The name of the sample to be treated.')
 
-    # Image loading
+    # Load images?
     parser.add_argument('-i', '--images', nargs='+',
                         help='Filenames of images associated to the sample.')
 
-    # Verbosity
+    # Show images?
+    parser.add_argument('-s', '--show', action='store_true',
+                        help='Shows the imported images. Only use in con-'\
+                        'junction with -i.')
+
+    # Verbosity?
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='Add verbosity. Prints more info on the screen.')
 
@@ -37,14 +44,25 @@ def main():
 #   ----------------------------------------------------------------------------
 
     # Generating a specimen
+    if args.verbose:
+        print('Generating a new sample named {}'.format(args.sample))
+        print('Starting the script with options {}'.format(args))
     specimen = sample.Sample(sample_name=args.sample)
 
     # Loading image pathes
     if args.images:
+        if args.verbose:
+            print('Loading the specified images.')
         specimen.image_pathes = args.images
         specimen.load_images()
 
+    # Showing the raaw images
+    if args.show:
+        if args.verbose:
+            print('Showing the raw images.')
+        for i, image in enumerate(specimen.images):
+            plt.imshow(image)
+            plt.show()
 
 if __name__ == "__main__":
-
     main()
