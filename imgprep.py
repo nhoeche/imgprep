@@ -27,7 +27,7 @@ def main():
                         help='The name of the sample to be treated.')
 
     # Load images?
-    parser.add_argument('-i', '--images', nargs='+',
+    parser.add_argument('images', nargs='+',
                         help='Filenames of images associated to the sample.')
 
     # Show images?
@@ -50,13 +50,12 @@ def main():
     specimen = sample.Sample(sample_name=args.sample)
 
     # Loading image pathes
-    if args.images:
-        if args.verbose:
-            print('Loading the specified images.')
-        specimen.image_pathes = args.images
-        specimen.load_images()
+    if args.verbose:
+        print('Loading the specified images.')
+    specimen.image_pathes = args.images
+    specimen.load_images()
 
-    # Showing the raaw images
+    # Showing the raw images
     if args.show:
         if args.verbose:
             print('Showing the raw images.')
