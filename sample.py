@@ -37,17 +37,7 @@ class Sample(object):
         # TODO: Save metadata
         # TODO: Maybe rotate the second polarized image by -45°
 
-    def square_detect(image):
-        '''
-        Detect a drawn square in the microscope images for later cropping.
-        '''
-        # Copypasted, functionality not guaranteed
-        # cols = (image[..., 0] == 255).sum(0)
-        # left = cols.argsort()[-2:].min()
-        # right = cols.argsort()[-2:].max()
-        pass
 
     # TODO: Recognize the Magnification and calculate scale-bar dimensions
-    # TODO: Recognize the Red square coordinates
     # TODO: Crop the images and place them next to each other
     # TODO: Create three scale-bars and insert them into the images
