@@ -1,5 +1,5 @@
 '''
-The sampe class for the imgprep script. One object of this class contains
+The sample class for the imgprep script. One object of this class contains
 three images of the sample. It also defines the methods used to process
 the images.
 '''
@@ -17,7 +17,7 @@ class Sample(object):
 
         self.name = sample_name
 
-        self.image_pathes = []
+        self.image_paths = []
         self.images = []
 
     def load_images(self):
@@ -26,13 +26,13 @@ class Sample(object):
         image metadata. Make sure to have filenames and image_pathes set so
         load the images.
         '''
-        self.image_count = len(self.image_pathes)
+        self.image_count = len(self.image_paths)
         self.images = [None] * self.image_count
 
         if self.image_count > 1:
-            self.images = skimage.io.imread_collection(self.image_pathes)
+            self.images = skimage.io.imread_collection(self.image_paths)
         else:
-            self.images = skimage.io.imread(str(self.image_pathes))
+            self.images = skimage.io.imread(str(self.image_paths))
 
         # TODO: Save metadata
         # TODO: Maybe rotate the second polarized image by -45°
