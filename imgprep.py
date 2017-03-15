@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 
 import sample
 
+from cropimage import cropimage
+
 
 def main():
     # Create the argparser
@@ -52,8 +54,14 @@ def main():
     # Loading image paths
     if args.verbose:
         print('Loading the specified images.')
-    specimen.image_paths = args.filename
-    specimen.load_images()
+#    specimen.image_paths = args.filename
+#    specimen.load_images()
+
+    # Crops the image, saves it as samplename_cropped.jpg
+    croppedimage = cropimage(args.filename[0])
+    cropped_filename = '{}_cropped.jpg'.format(args.samplename)
+    croppedimage.save(cropped_filename)
+    print('Cropped image saved as {}'.format(cropped_filename))
 
     # Showing the raw images
     if args.show:
