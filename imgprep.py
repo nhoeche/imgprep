@@ -23,11 +23,11 @@ def main():
     parser = argparse.ArgumentParser(usage=__doc__)
 
     # Sample-name: Mandatory
-    parser.add_argument('sample',
+    parser.add_argument('samplename',
                         help='The name of the sample to be treated.')
 
     # Load images?
-    parser.add_argument('images', nargs='+',
+    parser.add_argument('filename', nargs='+',
                         help='Filenames of images associated to the sample.')
 
     # Show images?
@@ -45,21 +45,21 @@ def main():
 
     # Generating a specimen
     if args.verbose:
-        print('Generating a new sample named {}'.format(args.sample))
+        print('Generating a new sample named {}'.format(args.samplename))
         print('Starting the script with options {}'.format(args))
-    specimen = sample.Sample(sample_name=args.sample)
+    specimen = sample.Sample(sample_name=args.samplename)
 
-    # Loading image pathes
+    # Loading image paths
     if args.verbose:
         print('Loading the specified images.')
-    specimen.image_pathes = args.images
+    specimen.image_paths = args.filename
     specimen.load_images()
 
     # Showing the raw images
     if args.show:
         if args.verbose:
             print('Showing the raw images.')
-        for i, image in enumerate(specimen.images):
+        for i, image in enumerate(specimen.filename):
             plt.imshow(image)
             plt.show()
 
