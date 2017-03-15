@@ -67,7 +67,7 @@ def main():
     if args.show:
         if args.verbose:
             print('Showing the raw images.')
-        for i, image in enumerate(specimen.filename):
+        for i, image in enumerate(specimen.images):
             plt.imshow(image)
             plt.show()
 
