@@ -21,7 +21,7 @@ The images will appear in triplets (normal light, polarized light, and polarized
     - [x] Recognize the red square around the object
       - [ ] Recognize a square of any color
     - [x] Crop the image to the insides of the red square
-	  - [ ] Crop image to squares of variable width
+	  - [ ] Crop image to squares with borders of variable width
   - [ ] Image-Arrangement
   - [ ] Scale-Bars
     - [ ] Calculate individual scale-bars for every sub-image
