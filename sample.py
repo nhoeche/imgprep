@@ -16,9 +16,10 @@ class Sample(object):
         '''
 
         self.name = sample_name
-
         self.image_paths = []
         self.images = []
+        self.numberofimages = 0
+
 
     def load_images(self):
         '''
@@ -26,10 +27,8 @@ class Sample(object):
         image metadata. Make sure to have filenames and image_pathes set so
         load the images.
         '''
-        self.image_count = len(self.image_paths)
-        self.images = [None] * self.image_count
-
-        if self.image_count > 1:
+        self.images = [None] * self.numberofimages
+        if self.numberofimages > 1:
             self.images = skimage.io.imread_collection(self.image_paths)
         else:
             self.images = skimage.io.imread(str(self.image_paths))

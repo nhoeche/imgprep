@@ -12,9 +12,7 @@ THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 
 import argparse
-
 import matplotlib.pyplot as plt
-
 import sample
 
 from cropimage import cropimage
@@ -50,11 +48,13 @@ def main():
         print('Generating a new sample named {}'.format(args.samplename))
         print('Starting the script with options {}'.format(args))
     specimen = sample.Sample(sample_name=args.samplename)
+    specimen.numberofimages = len(args.filename)
 
     # Loading image paths
     if args.verbose:
         print('Loading the specified images.')
     specimen.image_paths = args.filename[0]
+
     specimen.load_images()
 
     # Crops the image, saves it as samplename_cropped.jpg
