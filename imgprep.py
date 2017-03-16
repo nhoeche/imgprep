@@ -62,7 +62,7 @@ def main():
         print('Detecting squares...')
     specimen.detect_square()
 
-    # Reduces the size of the cropbox to within the colored border.
+    # Optionally increases the size of the cropbox to include the colored border.
     if args.border:
         specimen.cropbox[0] -= 8
         specimen.cropbox[1] -= 8

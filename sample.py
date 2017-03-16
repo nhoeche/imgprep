@@ -52,7 +52,7 @@ class Sample(object):
                     xlist.append(x)
                     ylist.append(y)
 
-        # Corners of the bounding box
+        # Inside corners of the bounding box
         self.xl = min(xlist)+8  # Left
         self.xr = max(xlist)-8  # Right
         self.yt = min(ylist)+8    # Top
