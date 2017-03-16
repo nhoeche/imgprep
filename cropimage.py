@@ -24,6 +24,5 @@ def cropimage(filename):
     yt = min(ylist) # Top
     yb = max(ylist) # Bottom
     cropbox = (xl, yt, xr, yb)
-    print('Returned cropped image')
     return im.crop(cropbox)
 
