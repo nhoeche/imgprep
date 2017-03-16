@@ -54,8 +54,8 @@ def main():
     # Loading image paths
     if args.verbose:
         print('Loading the specified images.')
-#    specimen.image_paths = args.filename
-#    specimen.load_images()
+    specimen.image_paths = args.filename[0]
+    specimen.load_images()
 
     # Crops the image, saves it as samplename_cropped.jpg
     croppedimage = cropimage(args.filename[0])
