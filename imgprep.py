@@ -15,6 +15,8 @@ import argparse
 import matplotlib.pyplot as plt
 import sample
 
+from PIL import Image
+
 def main():
     # Create the argparser
     parser = argparse.ArgumentParser(usage=__doc__)
@@ -31,6 +33,10 @@ def main():
     parser.add_argument('-s', '--show', action='store_true',
                         help='Shows the imported images. Only use in con-'\
                         'junction with -i.')
+
+    # Retain border?
+    parser.add_argument('-b', '--border', action='store_true',
+                        help='Retains the detection border.')
 
     # Verbosity?
     parser.add_argument('-v', '--verbose', action='store_true',
@@ -55,6 +61,17 @@ def main():
     if args.verbose:
         print('Detecting squares...')
     specimen.detect_square()
+
+    # Reduces the size of the cropbox to within the colored border.
+    if args.border:
+        specimen.cropbox[0] -= 8
+        specimen.cropbox[1] -= 8
+        specimen.cropbox[2] += 8
+        specimen.cropbox[3] += 8
+
+    # Saves a copy of the cropped image
+    croppedimage = specimen.image.crop(specimen.cropbox)
+    croppedimage.save('{}_cropped.jpg'.format(specimen.name))
 
     # Showing the raw images
     if args.show:

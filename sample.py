@@ -53,13 +53,14 @@ class Sample(object):
                     ylist.append(y)
 
         # Corners of the bounding box
-        xl = min(xlist)  # Left
-        xr = max(xlist)  # Right
-        yt = min(ylist)  # Top
-        yb = max(ylist)  # Bottom
-        self.cropbox = (xl, yt, xr, yb)
+        self.xl = min(xlist)+8  # Left
+        self.xr = max(xlist)-8  # Right
+        self.yt = min(ylist)+8    # Top
+        self.yb = max(ylist)-8    # Bottom
+        self.cropbox = [self.xl, self.yt, self.xr, self.yb]
 
 
     # TODO: Recognize the Magnification and calculate scale-bar dimensions
     # TODO: Crop the images and place them next to each other
     # TODO: Create three scale-bars and insert them into the images
+    # TODO: Recognize the width of the border
