@@ -17,9 +17,11 @@ The images will appear in triplets (normal light, polarized light, and polarized
     - [ ] Read the magnification(x20 or x63) from the file-name
     - [ ] Read the absolute scale (in mm) from a magnification table (.txt)
 - Alteration
-  - [ ] Cropping
-    - [ ] Recognize the red square around the object
-    - [ ] Crop the image to the insides of the red square
+  - [x] Cropping
+    - [x] Recognize the red square around the object
+      - [ ] Recognize a square of any color
+    - [x] Crop the image to the insides of the red square
+	  - [ ] Crop image to squares with borders of variable width
   - [ ] Image-Arrangement
   - [ ] Scale-Bars
     - [ ] Calculate individual scale-bars for every sub-image

@@ -12,28 +12,31 @@ THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 
 import argparse
-
 import matplotlib.pyplot as plt
-
 import sample
 
+from PIL import Image
 
 def main():
     # Create the argparser
     parser = argparse.ArgumentParser(usage=__doc__)
 
     # Sample-name: Mandatory
-    parser.add_argument('sample',
+    parser.add_argument('samplename',
                         help='The name of the sample to be treated.')
 
     # Load images?
-    parser.add_argument('images', nargs='+',
+    parser.add_argument('filename', nargs='+',
                         help='Filenames of images associated to the sample.')
 
     # Show images?
     parser.add_argument('-s', '--show', action='store_true',
                         help='Shows the imported images. Only use in con-'\
                         'junction with -i.')
+
+    # Retain border?
+    parser.add_argument('-b', '--border', action='store_true',
+                        help='Retains the detection border.')
 
     # Verbosity?
     parser.add_argument('-v', '--verbose', action='store_true',
@@ -45,15 +48,30 @@ def main():
 
     # Generating a specimen
     if args.verbose:
-        print('Generating a new sample named {}'.format(args.sample))
+        print('Generating a new sample named {}'.format(args.samplename))
         print('Starting the script with options {}'.format(args))
-    specimen = sample.Sample(sample_name=args.sample)
+    specimen = sample.Sample(sample_name=args.samplename)
+    specimen.numberofimages = len(args.filename)
 
-    # Loading image pathes
+    # Loading image paths
     if args.verbose:
         print('Loading the specified images.')
-    specimen.image_pathes = args.images
+    specimen.image_paths = args.filename[0]
     specimen.load_images()
+    if args.verbose:
+        print('Detecting squares...')
+    specimen.detect_square()
+
+    # Optionally increases the size of the cropbox to include the colored border.
+    if args.border:
+        specimen.cropbox[0] -= 8
+        specimen.cropbox[1] -= 8
+        specimen.cropbox[2] += 8
+        specimen.cropbox[3] += 8
+
+    # Saves a copy of the cropped image
+    croppedimage = specimen.image.crop(specimen.cropbox)
+    croppedimage.save('{}_cropped.jpg'.format(specimen.name))
 
     # Showing the raw images
     if args.show:
