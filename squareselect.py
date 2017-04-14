@@ -1,5 +1,5 @@
 import skimage
-import skimage.measure
+import skimage.measure as measure
 from matplotlib import pyplot as plt
 
 
@@ -18,19 +18,19 @@ class BoxFinder(object):
     def __init__(self,image_path, threshold=150):
         self.img_path = image_path
 
-        img = plt.imread(self.img_path) #Read the path
-        img_red_thresh = img[:, :, 0] > threshold #Find all pixels greater than threshold (arbitrary)
-        img_contour = skimage.measure.find_contours(img_red_thresh, 0, fully_connected='high') #Marching squares
+        img = plt.imread(self.img_path)  # Read the path
+        img_red_thresh = img[:, :, 0] > threshold  # Find all pixels greater than threshold (arbitrary)
+        img_contour = measure.find_contours(img_red_thresh, 0, fully_connected='high')  # Marching squares
 
-        i = [len(x) for x in img_contour].index(max([len(x) for x in img_contour])) #Returns index of biggest contour
+        i = [len(x) for x in img_contour].index(max([len(x) for x in img_contour]))  # Returns index of biggest contour
 
-        #Instantiates the largest x- and y-coordinates for each coordinate in the contour
+        # Instantiates the largest x- and y-coordinates for each coordinate in the contour
         x_max = 0
         y_max = 0
         x_min = img_contour[i][0][0]
         y_min = img_contour[i][0][0]
 
-        #This iteratively picks out the max and min values and assigns them
+        # This iteratively picks out the max and min values and assigns them
         for point in img_contour[i]:
             if point[0] > x_max:
                 x_max = point[0]
