@@ -12,8 +12,9 @@ The images will appear in triplets (normal light, polarized light, and polarized
 ## Script-Structure and Progress
 
 - Initialization
-  - [x] Load the three images of the same object
+  - [x] Load the all images of the same object
   - [ ] Meta-data
+    - [ ] Save image names and file-extensions
     - [ ] Read the magnification(x20 or x63) from the file-name
     - [ ] Read the absolute scale (in mm) from a magnification table (.txt)
 - Alteration
@@ -21,13 +22,14 @@ The images will appear in triplets (normal light, polarized light, and polarized
     - [x] Recognize the red square around the object
       - [ ] Recognize a square of any color
     - [x] Crop the image to the insides of the red square
-	  - [ ] Crop image to squares with borders of variable width
+  	  - [ ] Crop image to squares with borders of variable width
   - [ ] Image-Arrangement
   - [ ] Scale-Bars
     - [ ] Calculate individual scale-bars for every sub-image
     - [ ] Calculate positions for scale-bars
     - [ ] Insert scale-bars
 - Saving
+  - [x] Saving the cropped images
   - [ ] Save the finished arrangement of sample images into one file (.png)
 
 -> Profit
