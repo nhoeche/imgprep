@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 '''
 This is the "imgprep"-script for treating microscopy images.
 
@@ -8,6 +7,12 @@ Then it can also recognize a unicolor square in each, denoting the object of
 interest, to crop the contents of the square. It can put the images next
 to each other and insert custom scalebars based on magnification levels.
 
+-=FILES=-
+imgprep.py: Main script. Responsible for argparse and calling of the methods
+
+sample.py:  Class for treating a sample. Contains all associated variables,
+            images and methods. Get's called from imgprep.py.
+
 THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 
@@ -15,9 +20,9 @@ import argparse
 import matplotlib.pyplot as plt
 import sample
 
-from PIL import Image
 
-def main():
+def argparser():
+    # TODO: Outsource the parser setup into it's own function
     # Create the argparser
     parser = argparse.ArgumentParser(usage=__doc__)
 
@@ -26,60 +31,57 @@ def main():
                         help='The name of the sample to be treated.')
 
     # Load images?
-    parser.add_argument('filename', nargs='+',
+    parser.add_argument('filenames', nargs='+',
                         help='Filenames of images associated to the sample.')
 
-    # Show images?
-    parser.add_argument('-s', '--show', action='store_true',
-                        help='Shows the imported images. Only use in con-'\
-                        'junction with -i.')
-
-    # Retain border?
-    parser.add_argument('-b', '--border', action='store_true',
-                        help='Retains the detection border.')
+    # Crop?
+    parser.add_argument('-c', '--crop', action='store_true',
+                        help='Crop images to the size of painted-in squares')
 
     # Verbosity?
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='Add verbosity. Prints more info on the screen.')
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
-#   ----------------------------------------------------------------------------
 
+def main(args):
     # Generating a specimen
     if args.verbose:
         print('Generating a new sample named {}'.format(args.samplename))
         print('Starting the script with options {}'.format(args))
+
     specimen = sample.Sample(sample_name=args.samplename)
-    specimen.numberofimages = len(args.filename)
+    specimen.image_count = len(args.filename)
 
     # Loading image paths
     if args.verbose:
         print('Loading the specified images.')
-    specimen.image_paths = args.filename[0]
-    specimen.load_images()
-    if args.verbose:
-        print('Detecting squares...')
-    specimen.detect_square()
 
-    # Optionally increases the size of the cropbox to include the colored border.
-    if args.border:
-        specimen.cropbox[0] -= 8
-        specimen.cropbox[1] -= 8
-        specimen.cropbox[2] += 8
-        specimen.cropbox[3] += 8
+    specimen.load_images(args.filenames)
 
-    # Saves a copy of the cropped image
-    croppedimage = specimen.image.crop(specimen.cropbox)
-    croppedimage.save('{}_cropped.jpg'.format(specimen.name))
-
-    # Showing the raw images
-    if args.show:
+    # Cropping
+    if args.crop:
+        # Square detection
         if args.verbose:
-            print('Showing the raw images.')
-        for i, image in enumerate(specimen.images):
-            plt.imshow(image)
-            plt.show()
+            print('Starting the cropping process.')
+            print('Detecting the square(s).')
+
+        specimen.detect_square()
+
+        # Cropping
+        if args.verbose:
+            print('Cropping the images.')
+
+        specimen.crop()
+
+    # Saving
+    if args.crop:
+        if args.verbose:
+            print('Saving the cropped images')
+
+            specimen.save_images()
+
 
 if __name__ == "__main__":
-    main()
+    main(argparser())
