@@ -45,17 +45,19 @@ class Sample(object):
         self.image_count = len(self.image_pathes)
 
         # Determining names
-        for img in self.image_pathes:
-            _, name = img.rsplit('/')
-            name, extension = name.split('.')
+        for path in self.image_pathes:
+            head, tail = os.path.split(path)
+            name, extension = os.path.splitext(tail)
             self.image_names.append(name)
             self.image_extensions.append(extension)
 
         # Loading the images
         if self.image_count > 1:
             self.images = io.imread_collection(self.image_pathes)
-        else:
+        elif self.image_count = 1:
             self.images = io.imread(str(self.image_pathes))
+        else:
+            pass
 
         # TODO: Save metadata (magnification, scale, etc)
         # TODO: Maybe rotate the second polarized image by -45°
@@ -92,22 +94,12 @@ class Sample(object):
             # Find index of the biggest contour
             i = [len(x) for x in img_contour].index(max([len(x) for x in img_contour]))
 
-            # Instantiate the largest x- and y-coordinates for each coordinate
-            x_max = 0
-            y_max = 0
-            x_min = img_contour[i][0][0]
-            y_min = img_contour[i][0][0]
-
-            # Iteratively pick out the max and min values and assigns them
-            for point in img_contour[i]:
-                if point[0] > x_max:
-                    x_max = point[0]
-                if point[0] < x_min:
-                    x_min = point[0]
-                if point[1] > y_max:
-                    y_max = point[1]
-                if point[1] < y_min:
-                    y_min = point[1]
+            # Find the coordinates
+            x_points, y_points = zip(*img_contour[i])
+            x_max = max(x_points)
+            y_max = max(y_points)
+            x_min = min(x_points)
+            y_min = min(y_points)
 
             # The box dimensions
             self.box_dim[index] = (x_max - x_min, y_max - y_min)

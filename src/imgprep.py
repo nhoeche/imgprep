@@ -7,12 +7,6 @@ Then it can also recognize a unicolor square in each, denoting the object of
 interest, to crop the contents of the square. It can put the images next
 to each other and insert custom scalebars based on magnification levels.
 
--=FILES=-
-imgprep.py: Main script. Responsible for argparse and calling of the methods
-
-sample.py:  Class for treating a sample. Contains all associated variables,
-            images and methods. Get's called from imgprep.py.
-
 THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 import argparse
@@ -51,8 +45,7 @@ def main(args):
         print('Generating a new sample named {}'.format(args.samplename))
         print('Starting the script with options {}'.format(args))
 
-    specimen = sample.Sample(sample_name=args.samplename)
-    specimen.image_count = len(args.filename)
+    specimen = sample.Sample(args.samplename)
 
     # Loading image paths
     if args.verbose:
