@@ -9,7 +9,7 @@ Therefore I will write a small python-script for me to do it automatically. Anot
 
 The images will appear in triplets (normal light, polarized light, and polarized light turned by 90°). I can draw a red rectangle around objects in the microscope software.
 
-## Script-Structure and Progress
+## Script-Progress
 
 - Initialization
   - [x] Load the all images of the same object
@@ -32,4 +32,17 @@ The images will appear in triplets (normal light, polarized light, and polarized
   - [x] Saving the cropped images
   - [ ] Save the finished arrangement of sample images into one file (.png)
 
--> Profit
+---
+
+- Testing
+  - [ ] Employ basic testing structure
+    - [ ] Rewrite methods to serve a single purpose
+    - [ ] Write tests for every method
+
+---
+
+## TODO Priorities
+
+1. Rewrite methods to serve a single purpose
+2. Outsource the image-variables, so every image has it's own attributes like `image.name`, `image.extensions`. Also sub-attribute bounding box variables like `image.bbox.xmax`, `image.bbox.dims`
+3. Write tests

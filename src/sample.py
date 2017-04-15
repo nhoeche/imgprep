@@ -5,7 +5,6 @@ the images.
 '''
 import os
 
-import numpy as np
 import skimage
 import skimage.io as io
 import skimage.measure as measure
@@ -31,6 +30,7 @@ class Sample(object):
         self.sample_name = sample_name
         self.image_pathes = []
         self.image_names = []
+        self.image_extensions = []
         self.image_count = 0
         self.images = []
 
@@ -54,7 +54,7 @@ class Sample(object):
         # Loading the images
         if self.image_count > 1:
             self.images = io.imread_collection(self.image_pathes)
-        elif self.image_count = 1:
+        elif self.image_count == 1:
             self.images = io.imread(str(self.image_pathes))
         else:
             pass
@@ -117,7 +117,7 @@ class Sample(object):
             bot = top + self.box_dim[index][1]
 
             # Cropping
-            self.cropped_images[index] = img[left:right, top:bottom, :]
+            self.cropped_images[index] = img[left:right, top:bot, :]
 
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
         # TODO: Crop the images and place them next to each other

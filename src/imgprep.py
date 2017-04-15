@@ -10,7 +10,6 @@ to each other and insert custom scalebars based on magnification levels.
 THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 import argparse
-import os
 
 import sample
 
