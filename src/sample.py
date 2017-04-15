@@ -80,11 +80,11 @@ class Sample(object):
         coordinates.
         '''
         # Setting up the box variables
-        self.box_dim = np.zeros((self.image_count, 2), dtype=np.int8)
-        self.box_coords = np.zeros((self.image_count, 2), dtype=np.int8)
+        self.box_dim = []
+        self.box_coords = []
 
         # Iterate through images and detect each square
-        for index, img in enumerate(self.images):
+        for img in self.images:
             # Find all pixels greater than threshold (arbitrary)
             img_red_thresh = img[:, :, 0] > threshold
             # Marching squares algorithm to find contours
@@ -102,9 +102,9 @@ class Sample(object):
             y_min = min(y_points)
 
             # The box dimensions
-            self.box_dim[index] = (x_max - x_min, y_max - y_min)
+            self.box_dim.append(x_max - x_min, y_max - y_min)
             # The box coordinates
-            self.box_coords[index] = (x_min, y_min)
+            self.box_coords.append(x_min, y_min)
 
     def crop(self):
         # Iterate over images and crop
