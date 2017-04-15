@@ -3,6 +3,7 @@ The sample class for the imgprep script. One object of this class contains
 three images of the sample. It also defines the methods used to process
 the images.
 '''
+import os
 
 import numpy as np
 import skimage
@@ -42,16 +43,13 @@ class Sample(object):
         # Setting up variables
         self.image_pathes = filenames
         self.image_count = len(self.image_pathes)
-        self.image_names = [None] * self.image_count
-        self.image_extensions = [None] * self.image_count
-        self.images = [None] * self.image_count
 
         # Determining names
-        for i, img in enumerate(self.image_pathes):
+        for img in self.image_pathes:
             _, name = img.rsplit('/')
             name, extension = name.split('.')
-            self.image_names[i] = name
-            self.image_extensions[i] = extension
+            self.image_names.append(name)
+            self.image_extensions.append(extension)
 
         # Loading the images
         if self.image_count > 1:
@@ -67,11 +65,10 @@ class Sample(object):
         Method for saving the adjusted images.
         '''
         if cropped:
-            for i, img in enumerate(self.cropped_images):
-                name = self.image_names[i]
-                ext = self.image_extensions[i]
+            ls = [self.image_names, self.image_extensions, self.cropped_images]
+            for name, ext, img in zip(ls):
                 filename = '{}_cropped.{}'.format(name, ext)
-            io.imsave(filename, img)
+                io.imsave(filename, img)
         else:
             pass
 
@@ -118,8 +115,6 @@ class Sample(object):
             self.box_coords[index] = (x_min, y_min)
 
     def crop(self):
-        self.cropped_images = [None] * self.image_count
-
         # Iterate over images and crop
         for index, img in enumerate(self.images):
             # Setting up coordinates

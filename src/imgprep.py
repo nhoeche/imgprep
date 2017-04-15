@@ -15,9 +15,9 @@ sample.py:  Class for treating a sample. Contains all associated variables,
 
 THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
-
 import argparse
-import matplotlib.pyplot as plt
+import os
+
 import sample
 
 
