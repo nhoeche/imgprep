@@ -51,21 +51,18 @@ def main(args):
         print('Loading the specified images.')
 
     specimen.load_images(args.filenames)
+    if args.verbose:
+        print('Done.')
 
     # Cropping
     if args.crop:
         # Square detection
         if args.verbose:
             print('Starting the cropping process.')
-            print('Detecting the square(s).')
-
-        specimen.detect_square()
-
-        # Cropping
-        if args.verbose:
-            print('Cropping the images.')
 
         specimen.crop()
+        if args.verbose:
+            print('Done.')
 
     # Saving
     if args.crop:
@@ -73,6 +70,8 @@ def main(args):
             print('Saving the cropped images')
 
             specimen.save_images()
+            if args.verbose:
+                print('Done.')
 
 
 if __name__ == "__main__":
