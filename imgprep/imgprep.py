@@ -11,7 +11,7 @@ THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 import argparse
 
-import sample
+from . import sample
 
 
 def argparser():

@@ -1,5 +1,5 @@
-import imgprep
-import sample
+from . import imgprep
+from . import sample
 
 import unittest
 
@@ -31,15 +31,15 @@ class SampleTest(unittest.TestCase):
 # -- -- Image
 class ImageTest(unittest.TestCase):
     def setUp(self):
-        self.img = sample.Image('test.png')
+        self.img = sample.Image('tests/test.png')
 
     def test_init(self):
         # Name
-        self.assertEqual('test.png', self.img.path)
+        self.assertEqual('tests/test.png', self.img.path)
         self.assertEqual('test', self.img.name)
         self.assertEqual('.png', self.img.extension)
         # Image
-        np.testing.assert_array_equal(io.imread('test.png'), self.img.image)
+        np.testing.assert_array_equal(io.imread('tests/test.png'), self.img.image)
         # ROI parameters
         self.assertEqual([], self.img.box_dim)
         self.assertEqual([], self.img.box_coords)
