@@ -29,6 +29,14 @@ class SampleTest(unittest.TestCase):
         self.assertEqual(0, self.sample.image_count)
         self.assertEqual([], self.sample.cropped_images)
 
+    def test_loading(self):
+        self.sample.load_images(['tests/test.png'])
+
+        self.assertEqual(1, self.sample.image_count)
+
+        self.assertItemsEqual(sample.Image('tests/test.png'),
+                              self.sample.image_list[0])
+
 
 # -- -- Image
 class ImageTest(unittest.TestCase):
