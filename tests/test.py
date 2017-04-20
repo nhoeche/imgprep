@@ -11,9 +11,9 @@ from skimage import io
 # -- -- Argparse
 class ArgParserTest(unittest.TestCase):
     def setUp(self):
-        pass
+        self.parser = main.argparser()
 
-    def test_verbosity(self):
+    def parsing(self):
         pass
 
 
@@ -21,11 +21,13 @@ class ArgParserTest(unittest.TestCase):
 # -- -- Sample
 class SampleTest(unittest.TestCase):
     def setUp(self):
-        pass
+        self.sample = sample.Sample('test_sample')
 
-    # -- -- image Loading
-    def test_loading(self):
-        pass
+    def test_init(self):
+        self.assertEqual('test_sample', self.sample.sample_name)
+        self.assertEqual([], self.sample.image_list)
+        self.assertEqual(0, self.sample.image_count)
+        self.assertEqual([], self.sample.cropped_images)
 
 
 # -- -- Image

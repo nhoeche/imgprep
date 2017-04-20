@@ -11,7 +11,7 @@ THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 import argparse
 
-from . import sample
+from imgprep import sample
 
 
 def argparser():
