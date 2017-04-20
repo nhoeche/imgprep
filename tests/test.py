@@ -1,5 +1,5 @@
-from . import imgprep
-from . import sample
+from imgprep import imgprep
+from imgprep import sample
 
 import unittest
 
