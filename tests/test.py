@@ -1,4 +1,4 @@
-from imgprep import imgprep
+from imgprep import main
 from imgprep import sample
 
 import unittest
