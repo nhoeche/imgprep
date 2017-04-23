@@ -62,5 +62,24 @@ class LoadImageTest(unittest.TestCase):
         self.assertItemsEqual(sample.Image('tests/test.png'),
                               self.sample.image_list[0])
 
+
+class SquareDetectTest(unittest.Testcase):
+    def SetUp(self):
+        self.img = sample.Image('test.png')
+        self.img.detect_square()
+
+    def test_threshold(self):
+        pass
+
+    def test_contours(self):
+        pass
+
+    def test_coordinates(self):
+        pass
+
+    def test_coordinated(self):
+        pass
+
+
 if __name__ == "__main__":
     unittest.main()
