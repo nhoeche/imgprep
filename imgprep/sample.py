@@ -102,14 +102,14 @@ class Image(object):
         img_red_thresh = self.image[:, :, 0] > threshold
 
         # Marching squares algorithm to find contours
-        img_contour = measure.find_contours(img_red_thresh,
+        img_contours = measure.find_contours(img_red_thresh,
                                             0, fully_connected='high')
 
         # Find index of the biggest contour
-        i = [len(x) for x in img_contour].index(max([len(x) for x in img_contour]))
+        i = [len(x) for x in img_contours].index(max([len(x) for x in img_contours]))
 
         # Find the coordinates
-        x_points, y_points = zip(*img_contour[i])
+        x_points, y_points = zip(*img_contours[i])
         x_max = max(x_points)
         y_max = max(y_points)
         x_min = min(x_points)
