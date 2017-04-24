@@ -50,20 +50,25 @@ class LoadImageTest(unittest.TestCase):
         # Loading
         self.sample.load_images(['tests/test.png'])
         # Testing
+        self.assertIsNotNone(self.sample.image_list[0])
         self.assertEqual(1, self.sample.image_count)
-        self.assertItemsEqual(sample.Image('tests/test.png'),
-                              self.sample.image_list[0])
+        self.assertIsInstance(self.sample.image_list[0], sample.Image)
 
     def test_multiple_images(self):
         # Loading
         self.sample.load_images(['tests/test.png', 'tests/test1.png'])
         # Testing
         self.assertEqual(2, self.sample.image_count)
-        self.assertItemsEqual(sample.Image('tests/test.png'),
-                              self.sample.image_list[0])
+
+        self.assertIsNotNone((self.sample.image_list[0],
+                              self.sample.image_list[1]))
+        self.assertIsNot(self.sample.image_list[0],
+                         self.sample.image_list[1])
+        self.assertIsInstance(self.sample.image_list[0], sample.Image)
+        self.assertIsInstance(self.sample.image_list[1], sample.Image)
 
 
-class SquareDetectTest(unittest.Testcase):
+class SquareDetectTest(unittest.TestCase):
     def SetUp(self):
         self.img = sample.Image('test.png')
         self.img.detect_square()
