@@ -68,6 +68,11 @@ class LoadImageTest(unittest.TestCase):
         self.assertIsInstance(self.sample.image_list[1], sample.Image)
 
 
+class SaveImageTest(unittest.TestCase):
+    def SetUp(self):
+        pass
+
+
 class SquareDetectTest(unittest.TestCase):
     def SetUp(self):
         self.img = sample.Image('test.png')
