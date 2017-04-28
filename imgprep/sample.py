@@ -47,6 +47,7 @@ class Sample(object):
                 filename = '{}_cropped.{}'.format(img.name, img.extension)
                 io.imsave(filename, cropped)
         else:
+            print("Error: Cannot save image. No changes have been made.")
             pass
 
     def crop(self):
