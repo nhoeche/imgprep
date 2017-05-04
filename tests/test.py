@@ -36,7 +36,8 @@ class InitTest(unittest.TestCase):
         self.assertEqual('test', self.img.name)
         self.assertEqual('.png', self.img.extension)
         # Image-data
-        np.testing.assert_array_equal(io.imread('tests/test.png'), self.img.image)
+        np.testing.assert_array_equal(io.imread('tests/test.png'),
+                                      self.img.image)
         # ROI parameters
         self.assertEqual([], self.img.box_dim)
         self.assertEqual([], self.img.box_coords)
@@ -70,10 +71,30 @@ class LoadImageTest(unittest.TestCase):
 
 class SaveImageTest(unittest.TestCase):
     def setUp(self):
-        pass
+        self.sample = sample.Sample('test_sample')
+        # if cropped:
+        #     # Iterate over images
+        #     for img, cropped in zip(self.image_list, self.cropped_images):
+        #         filename = '{}_cropped.{}'.format(img.name, img.extension)
+        #         io.imsave(filename, cropped)
+        # else:
+        #     print("Error: Cannot save image. No changes have been made.")
+        #     pass
+
+    def test_uncropped(self):
+        self.sample.load_images(['tests/test.png'])
+        self.sample.sa
+
+    def test_single_image(self):
+        # Loading
+        self.sample.load_images(['tests/test.png'])
+
+    def test_multiple_images(self):
+        # Loading
+        self.sample.load_images(['tests/test.png', 'tests/test1.png'])
 
 
-class SquareDetectTest(unittest.TestCase):
+class ROIDetectTest(unittest.TestCase):
     def setUp(self):
         self.img = sample.Image('tests/test.png')
         self.img.detect_roi()
@@ -90,5 +111,13 @@ class SquareDetectTest(unittest.TestCase):
     def test_y_dim(self):
         self.assertAlmostEqual(self.img.roi_dim[1], 130, delta=20)
 
+
 if __name__ == "__main__":
-    unittest.main()
+    loader = unittest.TestLoader()
+    # Load tests into suite
+    suite = loader.loadTestsFromTestCase((InitTest,
+                                          LoadImageTest,
+                                          SaveImageTest,
+                                          ROIDetectTest))
+    # Run tests
+    unittest.TextTestRunner(verbosity=2).run(suite)

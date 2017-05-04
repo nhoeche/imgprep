@@ -48,7 +48,6 @@ class Sample(object):
                 io.imsave(filename, cropped)
         else:
             print("Error: Cannot save image. No changes have been made.")
-            pass
 
     def crop(self):
         '''
