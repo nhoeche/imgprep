@@ -76,10 +76,7 @@ class SaveImageTest(unittest.TestCase):
 class SquareDetectTest(unittest.TestCase):
     def SetUp(self):
         self.img = sample.Image('test.png')
-        self.img.detect_square()
-
-    def test_threshold(self):
-        pass
+        self.img.detect_roi()
 
     def test_contours(self):
         pass
@@ -87,7 +84,7 @@ class SquareDetectTest(unittest.TestCase):
     def test_coordinates(self):
         pass
 
-    def test_coordinated(self):
+    def test_dimensions(self):
         pass
 
 

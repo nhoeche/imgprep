@@ -59,10 +59,10 @@ class Sample(object):
             img.detect_square()
 
             # Setting up coordinates
-            left = img.box_coords[0]
-            right = left + img.box_dim[0]
-            top = img.box_coords[1]
-            bot = top + img.box_dim[1]
+            left = img.roi_coords[0]
+            right = left + img.roi_dim[0]
+            top = img.roi_coords[1]
+            bot = top + img.roi_dim[1]
             # Cropping
             self.cropped_images.append(img.image[left:right, top:bot, :])
 
@@ -91,12 +91,12 @@ class Image(object):
         self.image = io.imread(self.path)
 
         # ROI parameters
-        self.box_dim = []
-        self.box_coords = []
+        self.roi_dim = []
+        self.roi_coords = []
 
-    def detect_square(self, threshold=150):
+    def detect_roi(self, threshold=150):
         '''
-        Detects the square in the sample image. Determines box dimensions and
+        Detects the square in the sample image. Determines ROI dimensions and
         coordinates.
         '''
         # Find all pixels greater than threshold (arbitrary)
@@ -104,10 +104,12 @@ class Image(object):
 
         # Marching squares algorithm to find contours
         img_contours = measure.find_contours(img_red_thresh,
-                                            0, fully_connected='high')
+                                             0, fully_connected='high')
 
         # Find index of the biggest contour
         i = [len(x) for x in img_contours].index(max([len(x) for x in img_contours]))
+
+        # TODO: Add is_square method to check whether the ROI is a square
 
         # Find the coordinates
         x_points, y_points = zip(*img_contours[i])
@@ -116,7 +118,7 @@ class Image(object):
         x_min = min(x_points)
         y_min = min(y_points)
 
-        # The box dimensions
-        self.box_dim = (x_max - x_min, y_max - y_min)
-        # The box coordinates
-        self.box_coords = (x_min, y_min)
+        # The ROI dimensions
+        self.roi_dim = (x_max - x_min, y_max - y_min)
+        # The ROI coordinates
+        self.roi_coords = (x_min, y_min)
