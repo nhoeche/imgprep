@@ -56,7 +56,7 @@ class Sample(object):
         '''
         for img in self.image_list:
             # Detecting the square (ROI)
-            img.detect_square()
+            img.detect_roi()
 
             # Setting up coordinates
             left = img.roi_coords[0]
@@ -113,12 +113,13 @@ class Image(object):
 
         # Find the coordinates
         x_points, y_points = zip(*img_contours[i])
-        x_max = max(x_points)
-        y_max = max(y_points)
-        x_min = min(x_points)
-        y_min = min(y_points)
+        x_max = int(max(x_points))
+        y_max = int(max(y_points))
+        x_min = int(min(x_points))
+        y_min = int(min(y_points))
 
         # The ROI dimensions
-        self.roi_dim = (x_max - x_min, y_max - y_min)
+        self.roi_dim = [x_max - x_min, y_max - y_min]
+
         # The ROI coordinates
-        self.roi_coords = (x_min, y_min)
+        self.roi_coords = [x_min, y_min]

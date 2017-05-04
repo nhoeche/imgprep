@@ -11,9 +11,6 @@ THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 import argparse
 
-from imgprep import sample
-
-
 def argparser():
     # TODO: Outsource the parser setup into it's own function
     # Create the argparser
@@ -75,4 +72,5 @@ def main(args):
 
 
 if __name__ == "__main__":
+    import sample
     main(argparser())

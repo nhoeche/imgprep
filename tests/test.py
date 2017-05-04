@@ -69,24 +69,26 @@ class LoadImageTest(unittest.TestCase):
 
 
 class SaveImageTest(unittest.TestCase):
-    def SetUp(self):
+    def setUp(self):
         pass
 
 
 class SquareDetectTest(unittest.TestCase):
-    def SetUp(self):
-        self.img = sample.Image('test.png')
+    def setUp(self):
+        self.img = sample.Image('tests/test.png')
         self.img.detect_roi()
 
-    def test_contours(self):
-        pass
+    def test_x_coord(self):
+        self.assertAlmostEqual(self.img.roi_coords[0], 141, delta=5)
 
-    def test_coordinates(self):
-        pass
+    def test_y_coord(self):
+        self.assertAlmostEqual(self.img.roi_coords[1], 241, delta=5)
 
-    def test_dimensions(self):
-        pass
+    def test_x_dim(self):
+        self.assertAlmostEqual(self.img.roi_dim[0], 145, delta=20)
 
+    def test_y_dim(self):
+        self.assertAlmostEqual(self.img.roi_dim[1], 130, delta=20)
 
 if __name__ == "__main__":
     unittest.main()
