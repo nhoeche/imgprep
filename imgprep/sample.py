@@ -24,15 +24,15 @@ class Sample(object):
 
         self.cropped_image_list = []
 
-    def load_images(self, filenames):
+    def load_images(self, filepathes):
         '''
         Loads a microscope images as numpy array and saves the image metadata.
         Make sure to have filenames and pathes set so load the images.
         '''
-        self.image_count = len(filenames)
+        self.image_count = len(filepathes)
 
-        for filename in filenames:
-            self.image_list.append(Image(filename))
+        for image in filepathes:
+            self.image_list.append(Image(image))
 
         # TODO: Save metadata (magnification, scale, etc)
         # TODO: Maybe rotate the second polarized image by -45°
@@ -44,8 +44,8 @@ class Sample(object):
         if cropped:
             # Iterate over images
             for cropped in self.cropped_image_list:
-                filename = os.path.join(cropped.rel_path, cropped.filename)
-                io.imsave(filename, cropped.image)
+                filepath = os.path.join(cropped.dir_name, cropped.filename)
+                io.imsave(filepath, cropped.image)
         else:
             print("Error: Cannot save image. No changes have been made.")
 
@@ -56,8 +56,8 @@ class Sample(object):
         for img in self.image_list:
             # New filename
             new_filename = '{}_cropped{}'.format(img.name, img.extension)
-            new_filename = os.path.join(img.rel_path, new_filename)
-            self.cropped_image_list.append(Image(new_filename, load=False))
+            new_filepath = os.path.join(img.dir_name, new_filename)
+            self.cropped_image_list.append(Image(new_filepath, load=False))
 
         for img, cropped_img in zip(self.image_list, self.cropped_image_list):
             # Detecting the square (ROI)
@@ -83,23 +83,19 @@ class Image(object):
     formation concerning the images, as well as the image-files themselves.
     Methods performing on a single image are stored here.
     '''
-    def __init__(self, filename, load=True):
+    def __init__(self, filepath, load=True):
         '''
         Instantiates an image object, loads the image and sets up the variables
         '''
+        # Filename, Path, Name, Extension
+        self.dir_name = os.path.dirname(filepath)
+        self.abs_path = os.path.abspath(filepath)
+        self.filename = os.path.basename(self.abs_path)
+        self.name, self.extension = os.path.splitext(self.filename)
+
         # Image object
         if load:
-            self.image = io.imread(filename)
-
-        # Filename, Path, Name, Extension
-        if os.sep in filename:
-            self.rel_path, self.filename = os.path.split(filename)
-        else:
-            self.rel_path = None
-            self.filename = filename
-
-        self.abs_path = os.path.abspath(self.filename)
-        self.name, self.extension = os.path.splitext(self.filename)
+            self.image = io.imread(self.abs_path)
 
         # ROI parameters
         self.roi_dim = []

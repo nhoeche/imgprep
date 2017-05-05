@@ -32,7 +32,9 @@ class InitTest(unittest.TestCase):
 
     def image_init_test(self):
         # Name
-        self.assertEqual('tests/test.png', self.img.path)
+        self.assertEqual('/home/nils/Documents/Programming/Py/imgprep/tests/test.png', self.img.abs_path)
+        self.assertEqual('tests', self.img.dir_name)
+        self.assertEqual('test.png', self.img.filename)
         self.assertEqual('test', self.img.name)
         self.assertEqual('.png', self.img.extension)
         # Image-data
@@ -77,8 +79,10 @@ class SaveImageTest(unittest.TestCase):
         self.sample = sample.Sample('test_sample')
 
     def tearDown(self):
-        os.remove(os.path.join(self.cwd, 'test_cropped.png'))
-        os.remove(os.path.join(self.cwd, 'test1_cropped.png'))
+        if os.path.isfile(os.path.join(self.cwd, 'test_cropped.png')):
+            os.remove(os.path.join(self.cwd, 'test_cropped.png'))
+        if os.path.isfile(os.path.join(self.cwd, 'test1_cropped.png')):
+            os.remove(os.path.join(self.cwd, 'test1_cropped.png'))
 
     # def test_uncropped(self):
     #     self.sample.load_images(['test.png'])
@@ -86,7 +90,7 @@ class SaveImageTest(unittest.TestCase):
 
     def test_single_image(self):
         # Loading
-        self.sample.load_images(self.file1)
+        self.sample.load_images([self.file1])
         self.sample.crop()
         self.sample.save_images(cropped=True)
         # Filename
@@ -96,7 +100,7 @@ class SaveImageTest(unittest.TestCase):
 
     def test_multiple_images(self):
         # Loading
-        self.sample.load_images((self.file1, self.file2))
+        self.sample.load_images([self.file1, self.file2])
         self.sample.crop()
         self.sample.save_images(cropped=True)
         # Filename
