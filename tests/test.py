@@ -2,7 +2,7 @@ from imgprep import main
 from imgprep import sample
 
 import unittest
-
+import os
 import numpy as np
 from skimage import io
 
@@ -71,27 +71,40 @@ class LoadImageTest(unittest.TestCase):
 
 class SaveImageTest(unittest.TestCase):
     def setUp(self):
+        self.cwd = 'tests'
+        self.file1 = os.path.join(self.cwd, 'test.png')
+        self.file2 = os.path.join(self.cwd, 'test1.png')
         self.sample = sample.Sample('test_sample')
-        # if cropped:
-        #     # Iterate over images
-        #     for img, cropped in zip(self.image_list, self.cropped_images):
-        #         filename = '{}_cropped.{}'.format(img.name, img.extension)
-        #         io.imsave(filename, cropped)
-        # else:
-        #     print("Error: Cannot save image. No changes have been made.")
-        #     pass
 
-    def test_uncropped(self):
-        self.sample.load_images(['tests/test.png'])
-        self.sample.sa
+    def tearDown(self):
+        os.remove(os.path.join(self.cwd, 'test_cropped.png'))
+        os.remove(os.path.join(self.cwd, 'test1_cropped.png'))
+
+    # def test_uncropped(self):
+    #     self.sample.load_images(['test.png'])
+        # self.assertRaises(self.sample.save_image)
 
     def test_single_image(self):
         # Loading
-        self.sample.load_images(['tests/test.png'])
+        self.sample.load_images(self.file1)
+        self.sample.crop()
+        self.sample.save_images(cropped=True)
+        # Filename
+        filename = os.path.join(self.cwd, 'test_cropped.png')
+        # Checking if file exists
+        self.assertTrue(os.path.isfile(filename))
 
     def test_multiple_images(self):
         # Loading
-        self.sample.load_images(['tests/test.png', 'tests/test1.png'])
+        self.sample.load_images((self.file1, self.file2))
+        self.sample.crop()
+        self.sample.save_images(cropped=True)
+        # Filename
+        filename = os.path.join(self.cwd, 'test_cropped.png')
+        filename1 = os.path.join(self.cwd, 'test1_cropped.png')
+        # Checking if file exists
+        self.assertTrue(os.path.isfile(filename))
+        self.assertTrue(os.path.isfile(filename1))
 
 
 class ROIDetectTest(unittest.TestCase):

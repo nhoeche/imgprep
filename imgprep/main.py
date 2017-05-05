@@ -11,6 +11,7 @@ THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 import argparse
 
+
 def argparser():
     # TODO: Outsource the parser setup into it's own function
     # Create the argparser
@@ -66,7 +67,7 @@ def main(args):
         if args.verbose:
             print('Saving the cropped images')
 
-            specimen.save_images()
+            specimen.save_images(cropped=True)
             if args.verbose:
                 print('Done.')
 

@@ -22,7 +22,7 @@ class Sample(object):
         self.image_list = []
         self.image_count = 0
 
-        self.cropped_images = []
+        self.cropped_image_list = []
 
     def load_images(self, filenames):
         '''
@@ -43,9 +43,9 @@ class Sample(object):
         '''
         if cropped:
             # Iterate over images
-            for img, cropped in zip(self.image_list, self.cropped_images):
-                filename = '{}_cropped.{}'.format(img.name, img.extension)
-                io.imsave(filename, cropped)
+            for cropped in self.cropped_image_list:
+                filename = os.path.join(cropped.rel_path, cropped.filename)
+                io.imsave(filename, cropped.image)
         else:
             print("Error: Cannot save image. No changes have been made.")
 
@@ -54,6 +54,12 @@ class Sample(object):
         Iterate over images, detect squares and crop
         '''
         for img in self.image_list:
+            # New filename
+            new_filename = '{}_cropped{}'.format(img.name, img.extension)
+            new_filename = os.path.join(img.rel_path, new_filename)
+            self.cropped_image_list.append(Image(new_filename, load=False))
+
+        for img, cropped_img in zip(self.image_list, self.cropped_image_list):
             # Detecting the square (ROI)
             img.detect_roi()
 
@@ -63,7 +69,7 @@ class Sample(object):
             top = img.roi_coords[1]
             bot = top + img.roi_dim[1]
             # Cropping
-            self.cropped_images.append(img.image[left:right, top:bot, :])
+            cropped_img.image = img.image[left:right, top:bot, :]
 
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
         # TODO: Crop the images and place them next to each other
@@ -77,17 +83,23 @@ class Image(object):
     formation concerning the images, as well as the image-files themselves.
     Methods performing on a single image are stored here.
     '''
-    def __init__(self, filename):
+    def __init__(self, filename, load=True):
         '''
         Instantiates an image object, loads the image and sets up the variables
         '''
-        # Name
-        self.path = filename
-        head, tail = os.path.split(self.path)
-        self.name, self.extension = os.path.splitext(tail)
+        # Image object
+        if load:
+            self.image = io.imread(filename)
 
-        # File
-        self.image = io.imread(self.path)
+        # Filename, Path, Name, Extension
+        if os.sep in filename:
+            self.rel_path, self.filename = os.path.split(filename)
+        else:
+            self.rel_path = None
+            self.filename = filename
+
+        self.abs_path = os.path.abspath(self.filename)
+        self.name, self.extension = os.path.splitext(self.filename)
 
         # ROI parameters
         self.roi_dim = []
