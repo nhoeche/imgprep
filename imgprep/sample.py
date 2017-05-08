@@ -101,6 +101,13 @@ class Image(object):
         self.roi_dim = []
         self.roi_coords = []
 
+    def align(self):
+        '''
+        Aligns images next to each other. If the y-axis isn't the same length,
+        the remaining space should be filled with white or black space.
+        '''
+        pass
+
     def detect_roi(self, threshold=150):
         '''
         Detects the square in the sample image. Determines ROI dimensions and
