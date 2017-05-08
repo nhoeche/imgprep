@@ -116,7 +116,6 @@ class Image(object):
         # Find index of the biggest contour
         i = [len(x) for x in img_contours].index(max([len(x) for x in img_contours]))
 
-        # TODO: Add is_square method to check whether the ROI is a square
 
         # Find the coordinates
         x_points, y_points = zip(*img_contours[i])
@@ -125,8 +124,16 @@ class Image(object):
         x_min = int(min(x_points))
         y_min = int(min(y_points))
 
+        # Checks is ROI is square or not
+        if x_max - x_min == (y_max - y_min)-8:
+            is_square = True
+        else:
+            is_square = False
+
         # The ROI dimensions
         self.roi_dim = [x_max - x_min, y_max - y_min]
 
+
         # The ROI coordinates
         self.roi_coords = [x_min, y_min]
+
