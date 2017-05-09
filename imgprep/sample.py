@@ -39,34 +39,32 @@ class Sample(object):
         # TODO: Save metadata (magnification, scale, etc)
         # TODO: Maybe rotate the second polarized image by -45°
 
-    def save_images(self, cropped=False):
+    def save_images(self):
         '''
         Method for saving the adjusted images.
         '''
-        if cropped:
-            # Iterate over images
-            for cropped in self.cropped_image_list:
-                filepath = os.path.join(cropped.dir_name, cropped.filename)
-                io.imsave(filepath, cropped.image)
-        else:
-            print("Error: Cannot save image. No changes have been made.")
+        # Iterate over images
+        for cropped in self.cropped_image_list:
+            filepath = os.path.join(cropped.dir_name, cropped.filename)
+            io.imsave(filepath, cropped.image)
 
-    def add_scale(self):
+    def add_scale(self, cropped=False):
         '''
         Adds a scale to the top-right of the cropped image.
         '''
-        plt.figure()
-        image = plt.imread(self.new_filepath)
-        plt.imshow(image)
-        # TODO: Recognize the Magnification and calculate scale-bar dimensions
-        plt.axis('off', frameon=None)
-        scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
-        plt.gca().add_artist(scalebar)
+        list_selector = {True: self.cropped_image_list,
+                         False: self.image_list}
 
-        # TODO: Save as image_scaled.jpg
+        for img in list_selector[cropped]:
+            plt.figure()
+            plt.imshow(img)
+            plt.axis('off', frameon=None)
+            scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
+            # TODO: Recognize the Magnification and calculate scale-bar dimensions
+            plt.gca().add_artist(scalebar)
+            plt.savefig(self.new_filepath, frameon=None)
+
         # TODO: Eliminate the white border added by pyplot
-        plt.savefig(self.new_filepath, frameon=None)
-        print("image saved to", self.new_filepath)
 
     def crop(self):
         '''

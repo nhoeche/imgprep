@@ -29,6 +29,10 @@ def argparser():
     parser.add_argument('-c', '--crop', action='store_true',
                         help='Crop images to the size of painted-in squares')
 
+    # Scalebar?
+    parser.add_argument('-s', '--scale', action='store_true',
+                        help='Add a scalebar to the images.')
+
     # Verbosity?
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='Add verbosity. Prints more info on the screen.')
@@ -36,7 +40,6 @@ def argparser():
     # Plot a scale?
     parser.add_argument('-p', '--plot', action='store_true',
                         help='Plots a scale onto the image.')
-
 
     return parser.parse_args()
 
@@ -51,24 +54,29 @@ def main(args):
 
     # Loading image paths
     if args.verbose:
-        print('Attempting to load the specified images..')
-
+        print('Loading the specified images..')
     specimen.load_images(args.filenames)
     if args.verbose:
         print('Images loaded.')
 
     # Cropping
     if args.crop:
-        # Square detection
         if args.verbose:
             print('Starting the cropping process..')
-
         specimen.crop()
         if args.verbose:
             print('Cropping completed.')
 
+    # Scale Bar
+    if args.scale:
+        if args.verbose:
+            print('Adding a scale bar..')
+        specimen.add_scale()
+        if args.verbose:
+            print('Scale bar added.')
+
     # Saving
-    if args.crop:
+    if args.crop or args.scale:
         if args.verbose:
             print('Saving the processed image..')
 
@@ -83,6 +91,7 @@ def main(args):
         specimen.add_scale()
         if args.verbose:
             print('Scale drawn.')
+
 
 if __name__ == "__main__":
     import sample
