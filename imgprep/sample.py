@@ -52,11 +52,15 @@ class Sample(object):
             print("Error: Cannot save image. No changes have been made.")
 
     def add_scale(self):
+        '''
+        Adds a scale to the top-right of the image.
+        '''
         plt.figure()
         image = plt.imread(self.new_filepath)
         plt.imshow(image)
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
         scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
+        plt.axis('off')
         plt.gca().add_artist(scalebar)
         # TODO: Save as image_scaled.jpg
         plt.savefig(self.new_filepath)
@@ -83,18 +87,6 @@ class Sample(object):
             bot = top + img.roi_dim[1]
             # Cropping
             cropped_img.image = img.image[left:right, top:bot, :]
-
-    def add_scale(self):
-        '''
-        Adds a scale to the top-right of the image.
-        '''
-        plt.figure()
-        image = plt.imread(self.new_filepath)
-        plt.imshow(image)
-        scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
-        plt.axis('off')
-        plt.gca().add_artist(scalebar)
-        plt.savefig(self.new_filepath)
 
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
         # TODO: Crop the images and place them next to each other
