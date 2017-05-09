@@ -51,6 +51,17 @@ class Sample(object):
         else:
             print("Error: Cannot save image. No changes have been made.")
 
+    def add_scale(self):
+        plt.figure()
+        image = plt.imread(self.new_filepath)
+        plt.imshow(image)
+        # TODO: Recognize the Magnification and calculate scale-bar dimensions
+        scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
+        plt.gca().add_artist(scalebar)
+        # TODO: Save as image_scaled.jpg
+        plt.savefig(self.new_filepath)
+        print("image saved to", self.new_filepath)
+
     def crop(self):
         '''
         Iterate over images, detect squares and crop
@@ -84,7 +95,6 @@ class Sample(object):
         plt.axis('off')
         plt.gca().add_artist(scalebar)
         plt.savefig(self.new_filepath)
-        print("image saved to", self.new_filepath)
 
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
         # TODO: Crop the images and place them next to each other
@@ -120,6 +130,7 @@ class Image(object):
         Aligns images next to each other. If the y-axis isn't the same length,
         the remaining space should be filled with white or black space.
         '''
+        # TODO
         pass
 
     def detect_roi(self, threshold=150):
@@ -153,4 +164,3 @@ class Image(object):
 
         # The ROI coordinates
         self.roi_coords = [x_min, y_min]
-
