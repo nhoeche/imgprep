@@ -74,10 +74,14 @@ class Sample(object):
             cropped_img.image = img.image[left:right, top:bot, :]
 
     def add_scale(self):
+        '''
+        Adds a scale to the top-right of the image.
+        '''
         plt.figure()
         image = plt.imread(self.new_filepath)
         plt.imshow(image)
         scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
+        plt.axis('off')
         plt.gca().add_artist(scalebar)
         plt.savefig(self.new_filepath)
         print("image saved to", self.new_filepath)
