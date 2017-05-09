@@ -26,8 +26,8 @@ The images will appear in triplets (normal light, polarized light, and polarized
   - [ ] Image-Arrangement
   - [ ] Scale-Bars
     - [ ] Calculate individual scale-bars for every sub-image
-    - [ ] Calculate positions for scale-bars
-    - [ ] Insert scale-bars
+    - [x] Calculate positions for scale-bars
+    - [x] Insert scale-bars
 - Saving
   - [x] Saving the cropped images
   - [ ] Save the finished arrangement of sample images into one file (.png)
