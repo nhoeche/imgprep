@@ -7,7 +7,9 @@ import os
 
 import skimage.io as io
 import skimage.measure as measure
-#import matplotlib.pyplot as plot
+import matplotlib.pyplot as plt
+from matplotlib_scalebar.scalebar import ScaleBar
+
 
 
 class Sample(object):
@@ -27,7 +29,7 @@ class Sample(object):
     def load_images(self, filepaths):
         '''
         Loads a microscope images as numpy array and saves the image metadata.
-        Make sure to have filenames and pathes set so load the images.
+        Make sure to have filenames and paths set so load the images.
         '''
         self.image_count = len(filepaths)
 
@@ -56,8 +58,8 @@ class Sample(object):
         for img in self.image_list:
             # New filename
             new_filename = '{}_cropped{}'.format(img.name, img.extension)
-            new_filepath = os.path.join(img.dir_name, new_filename)
-            self.cropped_image_list.append(Image(new_filepath, load=False))
+            self.new_filepath = os.path.join(img.dir_name, new_filename)
+            self.cropped_image_list.append(Image(self.new_filepath, load=False))
 
         for img, cropped_img in zip(self.image_list, self.cropped_image_list):
             # Detecting the square (ROI)
@@ -70,6 +72,15 @@ class Sample(object):
             bot = top + img.roi_dim[1]
             # Cropping
             cropped_img.image = img.image[left:right, top:bot, :]
+
+    def add_scale(self):
+        plt.figure()
+        image = plt.imread(self.new_filepath)
+        plt.imshow(image)
+        scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
+        plt.gca().add_artist(scalebar)
+        plt.savefig(self.new_filepath)
+        print("image saved to", self.new_filepath)
 
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
         # TODO: Crop the images and place them next to each other
