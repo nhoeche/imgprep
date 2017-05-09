@@ -24,14 +24,14 @@ class Sample(object):
 
         self.cropped_image_list = []
 
-    def load_images(self, filepathes):
+    def load_images(self, filepaths):
         '''
         Loads a microscope images as numpy array and saves the image metadata.
         Make sure to have filenames and pathes set so load the images.
         '''
-        self.image_count = len(filepathes)
+        self.image_count = len(filepaths)
 
-        for image in filepathes:
+        for image in filepaths:
             self.image_list.append(Image(image))
 
         # TODO: Save metadata (magnification, scale, etc)
