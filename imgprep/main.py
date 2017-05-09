@@ -76,6 +76,7 @@ def main(args):
             if args.verbose:
                 print('Image saved.')
 
+    # Plotting scale
     if args.plot:
         if args.verbose:
             print('Plotting a scale..')
