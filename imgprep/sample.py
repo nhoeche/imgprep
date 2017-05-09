@@ -53,17 +53,19 @@ class Sample(object):
 
     def add_scale(self):
         '''
-        Adds a scale to the top-right of the image.
+        Adds a scale to the top-right of the cropped image.
         '''
         plt.figure()
         image = plt.imread(self.new_filepath)
         plt.imshow(image)
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
+        plt.axis('off', frameon=None)
         scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
-        plt.axis('off')
         plt.gca().add_artist(scalebar)
+
         # TODO: Save as image_scaled.jpg
-        plt.savefig(self.new_filepath)
+        # TODO: Eliminate the white border added by pyplot
+        plt.savefig(self.new_filepath, frameon=None)
         print("image saved to", self.new_filepath)
 
     def crop(self):
