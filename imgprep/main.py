@@ -33,6 +33,7 @@ def argparser():
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='Add verbosity. Prints more info on the screen.')
 
+
     return parser.parse_args()
 
 
@@ -46,11 +47,11 @@ def main(args):
 
     # Loading image paths
     if args.verbose:
-        print('Loading the specified images.')
+        print('Attempting to load the specified images.')
 
     specimen.load_images(args.filenames)
     if args.verbose:
-        print('Done.')
+        print('Images loaded.')
 
     # Cropping
     if args.crop:
@@ -60,16 +61,17 @@ def main(args):
 
         specimen.crop()
         if args.verbose:
-            print('Done.')
+            print('Cropping completed.')
+
 
     # Saving
     if args.crop:
         if args.verbose:
-            print('Saving the cropped images')
+            print('Saving the cropped image.')
 
             specimen.save_images(cropped=True)
             if args.verbose:
-                print('Done.')
+                print('Image saved.')
 
 
 if __name__ == "__main__":
