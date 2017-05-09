@@ -5,9 +5,9 @@ the images.
 '''
 import os
 
-import skimage
 import skimage.io as io
 import skimage.measure as measure
+#import matplotlib.pyplot as plot
 
 
 class Sample(object):
@@ -74,7 +74,6 @@ class Sample(object):
         # TODO: Recognize the Magnification and calculate scale-bar dimensions
         # TODO: Crop the images and place them next to each other
         # TODO: Create three scale-bars and insert them into the images
-        # TODO: Recognize the width of the border
 
 
 class Image(object):
@@ -121,25 +120,21 @@ class Image(object):
                                              0, fully_connected='high')
 
         # Find index of the biggest contour
-        i = [len(x) for x in img_contours].index(max([len(x) for x in img_contours]))
+        border = [len(x) for x in img_contours].index(max([len(x) for x in img_contours]))
 
-
-        # Find the coordinates
-        x_points, y_points = zip(*img_contours[i])
-        x_max = int(max(x_points))
-        y_max = int(max(y_points))
-        x_min = int(min(x_points))
-        y_min = int(min(y_points))
-
-        # Checks is ROI is square or not
-        if x_max - x_min == (y_max - y_min)-8:
-            is_square = True
-        else:
-            is_square = False
+        # Find the coordinates within the border
+        x_points, y_points = zip(*img_contours[border])
+        x_max = int(max(x_points)) - border
+        y_max = int(max(y_points)) - border
+        x_min = int(min(x_points)) + border
+        y_min = int(min(y_points)) + border
 
         # The ROI dimensions
         self.roi_dim = [x_max - x_min, y_max - y_min]
-
+        if self.roi_dim[0] == self.roi_dim[1]:
+            self.is_square = True
+        else:
+            self.is_square = False
 
         # The ROI coordinates
         self.roi_coords = [x_min, y_min]
