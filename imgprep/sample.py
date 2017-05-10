@@ -4,6 +4,7 @@ three images of the sample. It also defines the methods used to process
 the images.
 '''
 import os
+import tempfile
 
 import skimage.io as io
 import skimage.measure as measure
@@ -55,7 +56,8 @@ class Sample(object):
                          False: self.image_list}
 
         for img in list_selector[cropped]:
-            # TODO: Add method to image class for calculating px:µm ratio
+            # TODO: Add method to image class for calculating px:µm ratio and
+            #       adjust scalebar dynamically
             scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
 
             # Prepare a figure without axes
@@ -64,14 +66,17 @@ class Sample(object):
             plt.axis('off', frameon=None)
 
             # Add image and scale
-            plt.imshow(img)
+            plt.imshow(img.image)
             plt.gca().add_artist(scalebar)
 
-            # Save the figure without borders
+            # Save the figure without borders (to temporary file)
             extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-            plt.savefig(self.new_filepath, bbox_inches=extent)
+            tempfile = os.path.join(tempfile._get_default_tempdir, 'temp.png')
+            plt.savefig(tempfile, bbox_inches=extent)
 
-            # TODO: Recognize the Magnification and calculate scale-bar dimensions
+            # Reload the temporary file as image object and delete it
+            img.image = io.imread(tempfile)
+            os.remove(tempfile)
 
     def crop(self):
         '''
