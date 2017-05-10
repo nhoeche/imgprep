@@ -14,22 +14,22 @@ The images will appear in triplets (normal light, polarized light, and polarized
 - Initialization
   - [x] Load the all images of the same object
   - [ ] Meta-data
-    - [ ] Save image names and file-extensions
+    - [x] Save image names and file-extensions
     - [ ] Read the magnification(x20 or x63) from the file-name
-    - [ ] Read the absolute scale (in mm) from a magnification table (.txt)
 - Alteration
   - [x] Cropping
     - [x] Recognize the red square around the object
       - [ ] Recognize a square of any color
-    - [x] Crop the image to the insides of the red square
-  	  - [ ] Crop image to squares with borders of variable width
+    - [x] Crop the image to the ROI
+      - [ ] Crop to the insides of the square
+      - [ ] Crop to squares with borders of variable width
   - [ ] Image-Arrangement
   - [ ] Scale-Bars
     - [ ] Calculate individual scale-bars for every sub-image
     - [x] Calculate positions for scale-bars
     - [x] Insert scale-bars
 - Saving
-  - [x] Saving the cropped images
+  - [x] Saving the edited images
   - [ ] Save the finished arrangement of sample images into one file (.png)
 
 ---
@@ -43,6 +43,6 @@ The images will appear in triplets (normal light, polarized light, and polarized
 
 ## TODO Priorities
 
-1. Rewrite methods to serve a single purpose
-2. Outsource the image-variables, so every image has it's own attributes like `image.name`, `image.extensions`. Also sub-attribute bounding box variables like `image.bbox.xmax`, `image.bbox.dims`
-3. Write tests
+1. Rethink of how to keep track of the "current" `image_list`
+2. Read in magnification metadata
+  * Calculate scalebars
