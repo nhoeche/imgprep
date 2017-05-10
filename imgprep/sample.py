@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from matplotlib_scalebar.scalebar import ScaleBar
 
 
-
 class Sample(object):
     '''
     Class for a sample. Including microscopy images and methods for editing.
@@ -56,15 +55,23 @@ class Sample(object):
                          False: self.image_list}
 
         for img in list_selector[cropped]:
-            plt.figure()
-            plt.imshow(img)
-            plt.axis('off', frameon=None)
+            # TODO: Add method to image class for calculating px:µm ratio
             scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
-            # TODO: Recognize the Magnification and calculate scale-bar dimensions
-            plt.gca().add_artist(scalebar)
-            plt.savefig(self.new_filepath, frameon=None)
 
-        # TODO: Eliminate the white border added by pyplot
+            # Prepare a figure without axes
+            fig = plt.figure()
+            ax = plt.add_subplot(1, 1, 1)
+            plt.axis('off', frameon=None)
+
+            # Add image and scale
+            plt.imshow(img)
+            plt.gca().add_artist(scalebar)
+
+            # Save the figure without borders
+            extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+            plt.savefig(self.new_filepath, bbox_inches=extent)
+
+            # TODO: Recognize the Magnification and calculate scale-bar dimensions
 
     def crop(self):
         '''
