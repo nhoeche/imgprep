@@ -100,10 +100,6 @@ class Sample(object):
             # Cropping
             cropped_img.image = img.image[left:right, top:bot, :]
 
-        # TODO: Recognize the Magnification and calculate scale-bar dimensions
-        # TODO: Crop the images and place them next to each other
-        # TODO: Create three scale-bars and insert them into the images
-
 
 class Image(object):
     '''
