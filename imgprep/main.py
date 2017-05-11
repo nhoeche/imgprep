@@ -28,11 +28,13 @@ def argparser():
                         help='Filenames of images associated to the sample.')
 
     # Crop?
-    parser.add_argument('-c', '--no_crop', action='store_false', default=True,
-                        help='Do not crop images to the size of rectangles')
+    parser.add_argument('-c', '--no-crop', action='store_false',
+                        default=True, dest='crop',
+                        help='Do not crop the images.')
 
     # Scalebar?
-    parser.add_argument('-s', '--no_scale', action='store_false', default=True,
+    parser.add_argument('-s', '--no-scale', action='store_false',
+                        default=True, dest='scale',
                         help='Do not add a scalebar to the images.')
 
     # Verbosity?
@@ -60,7 +62,7 @@ def main(args):
 
     # Saving
     if args.crop or args.scale:
-        specimen.save_images(cropped=True)
+        specimen.save_images(verbose=args.verbose)
 
 
 if __name__ == "__main__":
