@@ -26,7 +26,7 @@ class Sample(object):
         self.image_list = []
         self.image_count = 0
 
-        self.cropped_image_list = []
+        self.edited_image_list = []
 
     def load_images(self, filepaths, verbose=False):
         '''
@@ -104,7 +104,7 @@ class Sample(object):
 
             # Prepare a figure without axes
             fig = plt.figure()
-            ax = plt.add_subplot(1, 1, 1)
+            ax = plt.subplot(1, 1, 1)
             plt.axis('off', frameon=None)
 
             # Add image and scale
@@ -113,12 +113,12 @@ class Sample(object):
 
             # Save the figure without borders (to temporary file)
             extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-            temp_file = os.path.join(tempfile._get_default_tempdir, 'temp.png')
+            temp_file = os.path.join(tempfile.gettempdir(), 'temp.png')
             plt.savefig(temp_file, bbox_inches=extent)
 
             # Reload the temporary file as image object and delete it
-            img.image = io.imread(tempfile)
-            os.remove(tempfile)
+            img.image = io.imread(temp_file)
+            os.remove(temp_file)
 
         if verbose:
             print('Scale bar added.')

@@ -28,7 +28,7 @@ class InitTest(unittest.TestCase):
         self.assertEqual('test_sample', self.sample.sample_name)
         self.assertEqual(0, self.sample.image_count)
         self.assertEqual([], self.sample.image_list)
-        self.assertEqual([], self.sample.cropped_images)
+        self.assertEqual([], self.sample.edited_images)
 
     def image_init_test(self):
         # Name
@@ -79,22 +79,18 @@ class SaveImageTest(unittest.TestCase):
         self.sample = sample.Sample('test_sample')
 
     def tearDown(self):
-        if os.path.isfile(os.path.join(self.cwd, 'test_cropped.png')):
-            os.remove(os.path.join(self.cwd, 'test_cropped.png'))
-        if os.path.isfile(os.path.join(self.cwd, 'test1_cropped.png')):
-            os.remove(os.path.join(self.cwd, 'test1_cropped.png'))
-
-    # def test_uncropped(self):
-    #     self.sample.load_images(['test.png'])
-        # self.assertRaises(self.sample.save_image)
+        if os.path.isfile(os.path.join(self.cwd, 'test_edited.png')):
+            os.remove(os.path.join(self.cwd, 'test_edited.png'))
+        if os.path.isfile(os.path.join(self.cwd, 'test1_edited.png')):
+            os.remove(os.path.join(self.cwd, 'test1_edited.png'))
 
     def test_single_image(self):
         # Loading
         self.sample.load_images([self.file1])
         self.sample.crop()
-        self.sample.save_images(cropped=True)
+        self.sample.save_images()
         # Filename
-        filename = os.path.join(self.cwd, 'test_cropped.png')
+        filename = os.path.join(self.cwd, 'test_edited.png')
         # Checking if file exists
         self.assertTrue(os.path.isfile(filename))
 
@@ -102,10 +98,10 @@ class SaveImageTest(unittest.TestCase):
         # Loading
         self.sample.load_images([self.file1, self.file2])
         self.sample.crop()
-        self.sample.save_images(cropped=True)
+        self.sample.save_images()
         # Filename
-        filename = os.path.join(self.cwd, 'test_cropped.png')
-        filename1 = os.path.join(self.cwd, 'test1_cropped.png')
+        filename = os.path.join(self.cwd, 'test_edited.png')
+        filename1 = os.path.join(self.cwd, 'test1_edited.png')
         # Checking if file exists
         self.assertTrue(os.path.isfile(filename))
         self.assertTrue(os.path.isfile(filename1))
