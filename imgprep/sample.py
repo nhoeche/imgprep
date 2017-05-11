@@ -16,46 +16,88 @@ class Sample(object):
     '''
     Class for a sample. Including microscopy images and methods for editing.
     '''
-    def __init__(self, sample_name):
+    def __init__(self, sample_name, verbose=False):
         '''
         Creates instances of the Sample class and sets initial variables.
         '''
+        if verbose:
+            print('Generating a new sample named {}'.format(sample_name))
         self.sample_name = sample_name
         self.image_list = []
         self.image_count = 0
 
         self.cropped_image_list = []
 
-    def load_images(self, filepaths):
+    def load_images(self, filepaths, verbose=False):
         '''
         Loads a microscope images as numpy array and saves the image metadata.
         Make sure to have filenames and paths set so load the images.
         '''
+        if verbose:
+            print('Loading the specified images..')
+
         self.image_count = len(filepaths)
 
         for image in filepaths:
             self.image_list.append(Image(image))
 
+        if verbose:
+            print('Images loaded.')
         # TODO: Save metadata (magnification, scale, etc)
         # TODO: Maybe rotate the second polarized image by -45°
 
-    def save_images(self):
+    def save_images(self, verbose=False):
         '''
         Method for saving the adjusted images.
         '''
-        # Iterate over images
-        for cropped in self.cropped_image_list:
-            filepath = os.path.join(cropped.dir_name, cropped.filename)
-            io.imsave(filepath, cropped.image)
+        if verbose:
+            print('Saving the processed image..')
 
-    def add_scale(self, cropped=False):
+        # Iterate over images
+        for edited_img in self.edited_image_list:
+            filepath = os.path.join(edited_img.dir_name, edited_img.filename)
+            io.imsave(filepath, edited_img.image)
+
+        if verbose:
+            print('Image saved.')
+
+    def init_editing(self):
+        for img in self.image_list:
+            # New filename
+            new_filename = '{}_edited{}'.format(img.name, img.extension)
+            self.new_filepath = os.path.join(img.dir_name, new_filename)
+            self.edited_image_list.append(Image(self.new_filepath, load=False))
+
+    def crop(self, verbose=False):
+        '''
+        Iterate over images, detect squares and crop
+        '''
+        if verbose:
+            print('Starting the cropping process..')
+
+        for img, cropped_img in zip(self.image_list, self.edited_image_list):
+            # Detecting the square (ROI)
+            img.detect_roi()
+
+            # Setting up coordinates
+            left = img.roi_coords[0]
+            right = left + img.roi_dim[0]
+            top = img.roi_coords[1]
+            bot = top + img.roi_dim[1]
+            # Cropping
+            cropped_img.image = img.image[left:right, top:bot, :]
+
+        if verbose:
+            print('Cropping completed.')
+
+    def add_scale(self, verbose=False):
         '''
         Adds a scale to the top-right of the cropped image.
         '''
-        list_selector = {True: self.cropped_image_list,
-                         False: self.image_list}
+        if verbose:
+            print('Adding a scale bar..')
 
-        for img in list_selector[cropped]:
+        for img in self.edited_image_list:
             # TODO: Add method to image class for calculating px:µm ratio and
             #       adjust scalebar dynamically
             scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
@@ -71,34 +113,15 @@ class Sample(object):
 
             # Save the figure without borders (to temporary file)
             extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-            tempfile = os.path.join(tempfile._get_default_tempdir, 'temp.png')
-            plt.savefig(tempfile, bbox_inches=extent)
+            temp_file = os.path.join(tempfile._get_default_tempdir, 'temp.png')
+            plt.savefig(temp_file, bbox_inches=extent)
 
             # Reload the temporary file as image object and delete it
             img.image = io.imread(tempfile)
             os.remove(tempfile)
 
-    def crop(self):
-        '''
-        Iterate over images, detect squares and crop
-        '''
-        for img in self.image_list:
-            # New filename
-            new_filename = '{}_cropped{}'.format(img.name, img.extension)
-            self.new_filepath = os.path.join(img.dir_name, new_filename)
-            self.cropped_image_list.append(Image(self.new_filepath, load=False))
-
-        for img, cropped_img in zip(self.image_list, self.cropped_image_list):
-            # Detecting the square (ROI)
-            img.detect_roi()
-
-            # Setting up coordinates
-            left = img.roi_coords[0]
-            right = left + img.roi_dim[0]
-            top = img.roi_coords[1]
-            bot = top + img.roi_dim[1]
-            # Cropping
-            cropped_img.image = img.image[left:right, top:bot, :]
+        if verbose:
+            print('Scale bar added.')
 
 
 class Image(object):

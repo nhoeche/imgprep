@@ -7,13 +7,15 @@ Then it can also recognize a unicolor square in each, denoting the object of
 interest, to crop the contents of the square. It can put the images next
 to each other and insert custom scalebars based on magnification levels.
 
+By default, the full editing routine is run. Use command line arguments like
+-c -s to skip certain steps.
+
 THIS SCRIPT IS STILL WORK IN PROGRESS!
 '''
 import argparse
 
 
 def argparser():
-    # TODO: Outsource the parser setup into it's own function
     # Create the argparser
     parser = argparse.ArgumentParser(usage=__doc__)
 
@@ -26,71 +28,39 @@ def argparser():
                         help='Filenames of images associated to the sample.')
 
     # Crop?
-    parser.add_argument('-c', '--crop', action='store_true',
-                        help='Crop images to the size of painted-in squares')
+    parser.add_argument('-c', '--no_crop', action='store_false', default=True,
+                        help='Do not crop images to the size of rectangles')
 
     # Scalebar?
-    parser.add_argument('-s', '--scale', action='store_true',
-                        help='Add a scalebar to the images.')
+    parser.add_argument('-s', '--no_scale', action='store_false', default=True,
+                        help='Do not add a scalebar to the images.')
 
     # Verbosity?
-    parser.add_argument('-v', '--verbose', action='store_true',
+    parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         help='Add verbosity. Prints more info on the screen.')
-
-    # Plot a scale?
-    parser.add_argument('-p', '--plot', action='store_true',
-                        help='Plots a scale onto the image.')
 
     return parser.parse_args()
 
 
 def main(args):
     # Generating a specimen
-    if args.verbose:
-        print('Generating a new sample named {}'.format(args.samplename))
-        print('Starting the script with options {}'.format(args))
+    specimen = sample.Sample(args.samplename, verbose=args.verbose)
 
-    specimen = sample.Sample(args.samplename)
-
-    # Loading image paths
-    if args.verbose:
-        print('Loading the specified images..')
-    specimen.load_images(args.filenames)
-    if args.verbose:
-        print('Images loaded.')
+    # Loading images
+    specimen.load_images(args.filenames, verbose=args.verbose)
+    specimen.init_editing()
 
     # Cropping
     if args.crop:
-        if args.verbose:
-            print('Starting the cropping process..')
-        specimen.crop()
-        if args.verbose:
-            print('Cropping completed.')
+        specimen.crop(verbose=args.verbose)
 
     # Scale Bar
     if args.scale:
-        if args.verbose:
-            print('Adding a scale bar..')
-        specimen.add_scale()
-        if args.verbose:
-            print('Scale bar added.')
+        specimen.add_scale(verbose=args.verbose)
 
     # Saving
     if args.crop or args.scale:
-        if args.verbose:
-            print('Saving the processed image..')
-
-            specimen.save_images(cropped=True)
-            if args.verbose:
-                print('Image saved.')
-
-    # Plotting scale
-    if args.plot:
-        if args.verbose:
-            print('Plotting a scale..')
-        specimen.add_scale()
-        if args.verbose:
-            print('Scale drawn.')
+        specimen.save_images(cropped=True)
 
 
 if __name__ == "__main__":

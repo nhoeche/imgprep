@@ -43,6 +43,5 @@ The images will appear in triplets (normal light, polarized light, and polarized
 
 ## TODO Priorities
 
-1. Rethink of how to keep track of the "current" `image_list`
-2. Read in magnification metadata
+1. Read in magnification metadata
   * Calculate scalebars
