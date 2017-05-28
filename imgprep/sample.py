@@ -1,8 +1,11 @@
-'''
-The sample class for the imgprep script. One object of this class contains
-three images of the sample. It also defines the methods used to process
-the images.
-'''
+"""
+The Sample and Image class for the imgprep script.
+
+The Sample class defines the methods used to process one sample and
+contains all information about it (including multiple images).
+The image class contains one of the multiple images of the sample, their
+metadata, and methods processing the single images.
+"""
 import os
 import tempfile
 
@@ -13,13 +16,10 @@ from matplotlib_scalebar.scalebar import ScaleBar
 
 
 class Sample(object):
-    '''
-    Class for a sample. Including microscopy images and methods for editing.
-    '''
+    """Class for samples. Including images and methods for processing."""
+
     def __init__(self, sample_name, verbose=False):
-        '''
-        Creates instances of the Sample class and sets initial variables.
-        '''
+        """Create instances of the Sample class and sets initial variables."""
         if verbose:
             print('Generating a new sample named {}'.format(sample_name))
         self.sample_name = sample_name
@@ -29,10 +29,11 @@ class Sample(object):
         self.edited_image_list = []
 
     def load_images(self, filepaths, verbose=False):
-        '''
-        Loads a microscope images as numpy array and saves the image metadata.
+        """
+        Load a microscope images as numpy array and saves the image metadata.
+
         Make sure to have filenames and paths set so load the images.
-        '''
+        """
         if verbose:
             print('Loading the specified images..')
 
@@ -47,9 +48,7 @@ class Sample(object):
         # TODO: Maybe rotate the second polarized image by -45°
 
     def save_images(self, verbose=False):
-        '''
-        Method for saving the adjusted images.
-        '''
+        """Save the processed images of the sample."""
         if verbose:
             print('Saving the processed image..')
 
@@ -62,6 +61,7 @@ class Sample(object):
             print('Image saved.')
 
     def init_editing(self):
+        """Initialize an array for the edited images and calculate filename."""
         for img in self.image_list:
             # New filename
             new_filename = '{}_edited{}'.format(img.name, img.extension)
@@ -69,9 +69,7 @@ class Sample(object):
             self.edited_image_list.append(Image(self.new_filepath, load=False))
 
     def crop(self, verbose=False):
-        '''
-        Iterate over images, detect squares and crop
-        '''
+        """Iterate over the images, detect the ROI and crop."""
         if verbose:
             print('Starting the cropping process..')
 
@@ -91,30 +89,30 @@ class Sample(object):
             print('Cropping completed.')
 
     def add_scale(self, verbose=False):
-        '''
-        Adds a scale to the top-right of the cropped image.
-        '''
+        """Add a scale to the top-right corner of the cropped image."""
         if verbose:
             print('Adding a scale bar..')
 
         for img in self.edited_image_list:
             # TODO: Add method to image class for calculating px:µm ratio and
             #       adjust scalebar dynamically
-            scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
 
             # Prepare a figure without axes
-            fig = plt.figure()
-            ax = plt.subplot(1, 1, 1)
-            plt.axis('off', frameon=None)
+            fig = plt.figure(frameon=False)
+            ax = plt.Axes(fig, [0., 0., 1., 1.])
+            ax.set_axes_off()
+
+            # Calculate the scalebar
+            scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
 
             # Add image and scale
-            plt.imshow(img.image)
+            plt.imshow(img.image, aspect='normal')
             plt.gca().add_artist(scalebar)
 
             # Save the figure without borders (to temporary file)
-            extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+            # extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
             temp_file = os.path.join(tempfile.gettempdir(), 'temp.png')
-            plt.savefig(temp_file, bbox_inches=extent)
+            plt.savefig(temp_file, dpi=600)
 
             # Reload the temporary file as image object and delete it
             img.image = io.imread(temp_file)
@@ -125,15 +123,16 @@ class Sample(object):
 
 
 class Image(object):
-    '''
-    Subclass of the sample class for images of each sample. It contains all in-
-    formation concerning the images, as well as the image-files themselves.
-    Methods performing on a single image are stored here.
-    '''
+    """
+    Subclass of the sample class for images of each sample.
+
+    It contains all information concerning the images, as well as
+    the image-files themselves. Methods performing on a single image are
+    stored here.
+    """
+
     def __init__(self, filepath, load=True):
-        '''
-        Instantiates an image object, loads the image and sets up the variables
-        '''
+        """Instantiate an image object, load the image and set up variables."""
         # Filename, Path, Name, Extension
         self.dir_name = os.path.dirname(filepath)
         self.abs_path = os.path.abspath(filepath)
@@ -149,18 +148,22 @@ class Image(object):
         self.roi_coords = []
 
     def align(self):
-        '''
-        Aligns images next to each other. If the y-axis isn't the same length,
+        """
+        Align images next to each other.
+
+        If the y-axis isn't the same length,
         the remaining space should be filled with white or black space.
-        '''
+        """
         # TODO
         pass
 
     def detect_roi(self, threshold=150):
-        '''
-        Detects the square in the sample image. Determines ROI dimensions and
+        """
+        Detect the square in the sample image.
+
+        Determines ROI dimensions and
         coordinates.
-        '''
+        """
         # Find all pixels greater than threshold (arbitrary)
         img_red_thresh = self.image[:, :, 0] > threshold
 
