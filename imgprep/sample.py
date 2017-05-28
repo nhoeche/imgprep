@@ -73,9 +73,11 @@ class Sample(object):
         if verbose:
             print('Starting the cropping process..')
 
-        for img, cropped_img in zip(self.image_list, self.edited_image_list):
+        for img, edit_img in zip(self.image_list, self.edited_image_list):
             # Detecting the square (ROI)
             img.detect_roi()
+            edit_img.roi_coords = img.roi_coords
+            edit_img.roi_dim = img.roi_dim
 
             # Setting up coordinates
             left = img.roi_coords[0]
@@ -83,7 +85,7 @@ class Sample(object):
             top = img.roi_coords[1]
             bot = top + img.roi_dim[1]
             # Cropping
-            cropped_img.image = img.image[left:right, top:bot, :]
+            edit_img.image = img.image[left:right, top:bot, :]
 
         if verbose:
             print('Cropping completed.')
@@ -98,21 +100,23 @@ class Sample(object):
             #       adjust scalebar dynamically
 
             # Prepare a figure without axes
-            fig = plt.figure(frameon=False)
-            ax = plt.Axes(fig, [0., 0., 1., 1.])
-            ax.set_axes_off()
+            fig = plt.figure(figsize=(img.roi_dim[0], img.roi_dim[1]),
+                             frameon=False, dpi=1)
+            ax = plt.subplot(1, 1, 1)
+            plt.axis('off')
 
             # Calculate the scalebar
             scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
 
             # Add image and scale
-            plt.imshow(img.image, aspect='normal')
+            plt.imshow(img.image, aspect='auto')
             plt.gca().add_artist(scalebar)
 
             # Save the figure without borders (to temporary file)
-            # extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+            ext = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
             temp_file = os.path.join(tempfile.gettempdir(), 'temp.png')
-            plt.savefig(temp_file, dpi=600)
+            plt.savefig(temp_file, bbox_inches=ext, pad_inches=0)
+            plt.close()
 
             # Reload the temporary file as image object and delete it
             img.image = io.imread(temp_file)
@@ -151,8 +155,8 @@ class Image(object):
         """
         Align images next to each other.
 
-        If the y-axis isn't the same length,
-        the remaining space should be filled with white or black space.
+        If the y-axis isn't the same length, the remaining space should be
+        filled with white or black space.
         """
         # TODO
         pass
@@ -161,8 +165,7 @@ class Image(object):
         """
         Detect the square in the sample image.
 
-        Determines ROI dimensions and
-        coordinates.
+        Returns ROI dimensions and coordinates.
         """
         # Find all pixels greater than threshold (arbitrary)
         img_red_thresh = self.image[:, :, 0] > threshold
