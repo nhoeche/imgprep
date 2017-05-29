@@ -123,6 +123,33 @@ class Sample(object):
         if verbose:
             print('Scale bar added.')
 
+    def align(self, verbose=False):
+        """
+        Align images next to each other.
+
+        If the y-axis isn't the same length, the remaining space should be
+        filled with white or black space.
+        """
+        if verbose:
+            print('Aligning images..')
+        # Creating a figure
+        plt.figure()
+
+        # Adding the images to subplots
+        for i, img in enumerate(self.edited_image_list):
+            plt.subplot(1, self.image_count, i + 1)
+            plt.axis('off', frameon=False)
+            plt.imshow(img.image)
+
+        # Filename and saving
+        file_dir = os.path.dirname(os.path.realpath(__file__))
+        filename = self.sample_name + '_aligned.jpg'
+        filepath = os.path.join(file_dir, filename)
+        plt.savefig(filepath, bbox_inches='tight', pad_inches=0, dpi=600)
+
+        if verbose:
+            print('Alignment done. Complete image saved.')
+
 
 class Image(object):
     """
@@ -159,16 +186,6 @@ class Image(object):
         # ROI parameters
         self.roi_dim = []
         self.roi_coords = []
-
-    def align(self):
-        """
-        Align images next to each other.
-
-        If the y-axis isn't the same length, the remaining space should be
-        filled with white or black space.
-        """
-        # TODO
-        pass
 
     def calculate_magnification(self, verbose=False):
         """Read magnification metadata and calculate the px:mm ratio."""

@@ -16,35 +16,35 @@ import argparse
 
 
 def argparser():
-    # Create the argparser
+    """Create the argparser."""
     parser = argparse.ArgumentParser(usage=__doc__)
 
     # Sample-name: Mandatory
     parser.add_argument('samplename',
                         help='The name of the sample to be treated.')
-
     # Load images?
     parser.add_argument('filenames', nargs='+',
                         help='Filenames of images associated to the sample.')
-
     # Crop?
     parser.add_argument('-c', '--no-crop', action='store_false',
                         default=True, dest='crop',
                         help='Do not crop the images.')
-
     # Scalebar?
     parser.add_argument('-s', '--no-scale', action='store_false',
                         default=True, dest='scale',
                         help='Do not add a scalebar to the images.')
-
+    # Align?
+    parser.add_argument('-a', '--no-align', action='store_false',
+                        default=True, dest='align',
+                        help='Do not add a align the images.')
     # Verbosity?
     parser.add_argument('-v', '--verbose', action='store_true', default=False,
                         help='Add verbosity. Prints more info on the screen.')
-
     return parser.parse_args()
 
 
 def main(args):
+    """Execute the program"""
     # Generating a specimen
     specimen = sample.Sample(args.samplename, verbose=args.verbose)
 
@@ -59,6 +59,9 @@ def main(args):
     # Scale Bar
     if args.scale:
         specimen.add_scale(verbose=args.verbose)
+
+    if args.align:
+        specimen.align(verbose=args.verbose)
 
     # Saving
     if args.crop or args.scale:
