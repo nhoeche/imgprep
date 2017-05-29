@@ -6,13 +6,17 @@ contains all information about it (including multiple images).
 The image class contains one of the multiple images of the sample, their
 metadata, and methods processing the single images.
 """
+import re
 import os
 import tempfile
 
-import skimage.io as io
-import skimage.measure as measure
 import matplotlib.pyplot as plt
 from matplotlib_scalebar.scalebar import ScaleBar
+
+import pandas as pd
+
+import skimage.io as io
+import skimage.measure as measure
 
 
 class Sample(object):
@@ -146,6 +150,11 @@ class Image(object):
         # Image object
         if load:
             self.image = io.imread(self.abs_path)
+
+        # Metadata
+        mag_table = pd.read_csv('magnifications.csv')
+        m = re.match(r'\d{1,2}\.?\d{1,2}x', self.name)
+        self.magnification = m.group()
 
         # ROI parameters
         self.roi_dim = []
