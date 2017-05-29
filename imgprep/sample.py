@@ -44,7 +44,7 @@ class Sample(object):
         self.image_count = len(filepaths)
 
         for image in filepaths:
-            self.image_list.append(Image(image))
+            self.image_list.append(Image(image, verbose=verbose))
 
         if verbose:
             print('Images loaded.')
@@ -69,8 +69,9 @@ class Sample(object):
         for img in self.image_list:
             # New filename
             new_filename = '{}_edited{}'.format(img.name, img.extension)
-            self.new_filepath = os.path.join(img.dir_name, new_filename)
-            self.edited_image_list.append(Image(self.new_filepath, load=False))
+            edit_filepath = os.path.join(img.dir_name, new_filename)
+            edit_img = Image(edit_filepath, image=img.image, load=False)
+            self.edited_image_list.append(edit_img)
 
     def crop(self, verbose=False):
         """Iterate over the images, detect the ROI and crop."""
@@ -100,26 +101,20 @@ class Sample(object):
             print('Adding a scale bar..')
 
         for img in self.edited_image_list:
-            # TODO: Add method to image class for calculating px:µm ratio and
-            #       adjust scalebar dynamically
-
             # Prepare a figure without axes
-            fig = plt.figure(figsize=(img.roi_dim[0], img.roi_dim[1]),
-                             frameon=False, dpi=1)
-            ax = plt.subplot(1, 1, 1)
-            plt.axis('off')
-
-            # Calculate the scalebar
-            scalebar = ScaleBar(0.000002)  # 1 pixel = 0.2 meter
+            fig = plt.figure(figsize=(img.roi_dim[0], img.roi_dim[1]))
+            ax = fig.add_subplot(111)
+            ax.axes.axis('off')
 
             # Add image and scale
-            plt.imshow(img.image, aspect='auto')
-            plt.gca().add_artist(scalebar)
+            ax.imshow(img.image)
+            scalebar = ScaleBar(img.mm_to_px)
+            ax.add_artist(scalebar)
 
-            # Save the figure without borders (to temporary file)
+            # Save the figure without borders to a temporary file
             ext = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
             temp_file = os.path.join(tempfile.gettempdir(), 'temp.png')
-            plt.savefig(temp_file, bbox_inches=ext, pad_inches=0)
+            fig.savefig(temp_file, bbox_inches=ext, pad_inches=0)
             plt.close()
 
             # Reload the temporary file as image object and delete it
@@ -139,8 +134,14 @@ class Image(object):
     stored here.
     """
 
-    def __init__(self, filepath, load=True):
-        """Instantiate an image object, load the image and set up variables."""
+    def __init__(self, filepath=None, image=None, load=True, verbose=False):
+        """
+        Instantiate an image object, load the image and set up variables.
+
+        filepath: path of the image to be loaded (if load=True)
+        image: preexisting image object (if load=False)
+        load: load an image? Use False if using a preexisting one.
+        """
         # Filename, Path, Name, Extension
         self.dir_name = os.path.dirname(filepath)
         self.abs_path = os.path.abspath(filepath)
@@ -150,11 +151,11 @@ class Image(object):
         # Image object
         if load:
             self.image = io.imread(self.abs_path)
+        else:
+            self.image = image
 
-        # Metadata
-        mag_table = pd.read_csv('magnifications.csv')
-        m = re.match(r'\d{1,2}\.?\d{1,2}x', self.name)
-        self.magnification = m.group()
+        # Magnification
+        self.calculate_magnification(verbose=verbose)
 
         # ROI parameters
         self.roi_dim = []
@@ -169,6 +170,31 @@ class Image(object):
         """
         # TODO
         pass
+
+    def calculate_magnification(self, verbose=False):
+        """Read magnification metadata and calculate the px:mm ratio."""
+        mag_dir = os.path.dirname(os.path.realpath(__file__))
+        mag_table = pd.read_csv(os.path.join(mag_dir, 'magnifications.csv'))
+        full_px_width = 2048.
+
+        self.px_height, self.px_width, self.channels = self.image.shape
+
+        m = re.search(r'\d{1,2}\.?\d{1,2}x', self.name)
+        try:
+            self.magnification = m.group()
+        except AttributeError:
+            if verbose:
+                print('Loading magnification failed.'
+                      'Missing magnification info in filename.')
+            pass
+
+        # mm-Width
+        i = mag_table.magnification == self.magnification
+        self.mm_width = float(mag_table.mm_width[i])
+
+        # Ratio
+        px_ratio = self.px_width / full_px_width
+        self.mm_to_px = (self.mm_width / full_px_width) * px_ratio
 
     def detect_roi(self, threshold=150):
         """
