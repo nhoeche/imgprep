@@ -101,20 +101,19 @@ class Sample(object):
             print('Adding a scale bar..')
 
         for img in self.edited_image_list:
-            # Prepare a figure without axes
-            fig = plt.figure(figsize=(img.roi_dim[0], img.roi_dim[1]))
-            ax = fig.add_subplot(111)
-            ax.axes.axis('off')
+            scalebar = ScaleBar(img.mm_to_px)
+            # Prepare a figure without axes and calculate figure sizes
+            fig = plt.figure()
+            ax = plt.subplot(1, 1, 1)
+            plt.axis('off', frameon=False)
 
             # Add image and scale
             ax.imshow(img.image)
-            scalebar = ScaleBar(img.mm_to_px)
             ax.add_artist(scalebar)
 
             # Save the figure without borders to a temporary file
-            ext = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
             temp_file = os.path.join(tempfile.gettempdir(), 'temp.png')
-            fig.savefig(temp_file, bbox_inches=ext, pad_inches=0)
+            fig.savefig(temp_file, bbox_inches='tight', pad_inches=0)
             plt.close()
 
             # Reload the temporary file as image object and delete it
