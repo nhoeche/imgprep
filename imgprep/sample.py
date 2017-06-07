@@ -113,7 +113,7 @@ class Sample(object):
 
             # Save the figure without borders to a temporary file
             temp_file = os.path.join(tempfile.gettempdir(), 'temp.png')
-            fig.savefig(temp_file, bbox_inches='tight', pad_inches=0)
+            fig.savefig(temp_file, bbox_inches='tight', pad_inches=0, dpi=600)
             plt.close()
 
             # Reload the temporary file as image object and delete it
