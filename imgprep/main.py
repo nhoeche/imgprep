@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 '''
 This is the "imgprep"-script for treating microscopy images.
 
