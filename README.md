@@ -1,5 +1,7 @@
 # imgprep
 
+**PLAESE NOTE: Development of this project is currently not active.**
+
 A small script to prepare the images of my microscopy for analysis.
 
 ## Reasoning for the script
